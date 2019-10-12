@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+  - "node"
+
+script:
+  - yarn lint
+  - yarn build
+  - touch out/.nojekyll # See https://github.com/zeit/next.js/wiki/Deploying-a-Next.js-app-into-GitHub-Pages#add-a-nojekyll-file
+
+deploy:
+  local_dir: out
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
