@@ -3,6 +3,7 @@ node_js:
   - "node"
 
 script:
+  - npx next telemetry disable
   - yarn lint
   - yarn build
   - touch out/.nojekyll # See https://github.com/zeit/next.js/wiki/Deploying-a-Next.js-app-into-GitHub-Pages#add-a-nojekyll-file
