@@ -4,6 +4,7 @@ import PronounsManager from 'logic/PronounsManager'
 import { IPronounsManager } from 'logic/IPronounsManager'
 import PronounsViewer from 'components/PronounsViewer'
 import { NextPage } from 'next'
+import { pathPrefix } from 'config'
 
 const useManager = (queryData: string | null): IPronounsManager => {
   const data = queryData !== null ? queryData : null
@@ -22,11 +23,11 @@ const Home: NextPage<Props> = ({ data }) => {
     <>
       <Head>
         <title>Mes Pronoms</title>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="icon" href={`${pathPrefix}favicon.ico`} />
+        <link rel="apple-touch-icon" sizes="180x180" href={`${pathPrefix}apple-touch-icon.png`} />
+        <link rel="icon" type="image/png" sizes="32x32" href={`${pathPrefix}favicon-32x32.png`} />
+        <link rel="icon" type="image/png" sizes="16x16" href={`${pathPrefix}favicon-16x16.png`} />
+        <link rel="manifest" href={`${pathPrefix}site.webmanifest`} />
       </Head>
 
       <PronounsViewer manager={manager} />
