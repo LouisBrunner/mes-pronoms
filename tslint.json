@@ -1,16 +1,21 @@
 {
-    "defaultSeverity": "error",
-    "extends": [
-        "tslint:recommended"
-    ],
-    "jsRules": {},
-    "rules": {
-      "semicolon": [true, "never"],
-      "quotemark": [true, "single", "jsx-double"],
-      "indent": [true, "spaces", 2],
-      "ordered-imports": false,
-      "interface-name": false,
-      "no-console": [true, "log"]
-    },
-    "rulesDirectory": []
+  "defaultSeverity": "error",
+  "extends": [
+      "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "semicolon": [true, "never"],
+    "quotemark": [true, "single", "jsx-double"],
+    "indent": [true, "spaces", 2],
+    "ordered-imports": false,
+    "interface-name": false,
+    "no-console": [true, "log"]
+  },
+  "rulesDirectory": [],
+  "linterOptions": {
+    "exclude": [
+      "config.js"
+    ]
+  }
 }
