@@ -30,13 +30,28 @@ const PronomCard: React.FunctionComponent<Props> = ({ manager, pronoun }) => {
   const pluralChoice = findPronoun(content.choices.plural, manager.getPronoun(pronoun, false))
 
   return (
-    <div>
-      <div>{content.text.title}: {content.text.description}</div>
-      <div>Il faut utiliser <strong>{singularChoice}/{pluralChoice}</strong></div>
+    <div className="card">
+      <style jsx>{`
+        .card {
+          background: #EEE;
+          border-radius: 2px;
+          padding: 10px 15px;
+        }
+
+        h4, ul {
+          margin: 0;
+        }
+      `}</style>
+
+      <h4>{content.text.title}</h4>
+      <p>{content.text.description}</p>
+      <p>Il faut utiliser <strong>{singularChoice}/{pluralChoice}</strong></p>
       <div>
         Examples:
-        <div>Singulier: {content.text.examples.singularWith(singularChoice)}</div>
-        <div>Pluriel: {content.text.examples.pluralWith(pluralChoice)}</div>
+        <ul>
+          <li><em>Singulier</em>: {content.text.examples.singularWith(singularChoice)}</li>
+          <li><em>Pluriel</em>: {content.text.examples.pluralWith(pluralChoice)}</li>
+        </ul>
       </div>
     </div>
   )

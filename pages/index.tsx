@@ -21,6 +21,12 @@ const Home: NextPage<Props> = ({ data }) => {
 
   return (
     <>
+      <style jsx global>{`
+        body {
+          font-family: Helvetica, Arial, sans-serif;
+        }
+      `}</style>
+
       <Head>
         <title>Mes Pronoms</title>
         <link rel="icon" href={`${pathPrefix}favicon.ico`} />
