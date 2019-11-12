@@ -10,7 +10,8 @@
     "indent": [true, "spaces", 2],
     "ordered-imports": false,
     "interface-name": false,
-    "no-console": [true, "log"]
+    "no-console": [true, "log"],
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": [],
   "linterOptions": {

@@ -1,12 +1,17 @@
 import React from 'react'
-import { Pronouns, IPronounsManager } from 'logic/IPronounsManager'
+import { PronounList, IPronounsManager } from 'logic/IPronounsManager'
+import PronomCard from 'components/PronomCard'
 
 interface Props {
   manager: IPronounsManager,
 }
 
 const PronounsViewer: React.FunctionComponent<Props> = ({ manager }) => (
-  <div>Pronom sujet: {manager.getPronoun(Pronouns.PronomSujet)}</div>
+  <>
+    {PronounList.map((pronoun, i) => (
+      <PronomCard key={i} manager={manager} pronoun={pronoun} />
+    ))}
+  </>
 )
 
 export default PronounsViewer
