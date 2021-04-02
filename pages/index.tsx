@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import Head from 'next/head'
 import PronounsManager from 'logic/PronounsManager'
-import { IPronounsManager } from 'logic/IPronounsManager'
+import {IPronounsManager} from 'logic/IPronounsManager'
 import PronounsViewer from 'components/PronounsViewer'
-import { NextPage } from 'next'
-import { pathPrefix } from 'config'
+import {NextPage} from 'next'
+import {pathPrefix} from 'config'
 
 const useManager = (queryData: string | null): IPronounsManager => {
   const data = queryData !== null ? queryData : null
@@ -16,7 +16,7 @@ interface Props {
   data: string | null,
 }
 
-const Home: NextPage<Props> = ({ data }) => {
+const Home: NextPage<Props> = ({data}) => {
   const manager = useManager(data)
 
   return (
@@ -41,7 +41,7 @@ const Home: NextPage<Props> = ({ data }) => {
   )
 }
 
-Home.getInitialProps = async ({ query }) => {
+Home.getInitialProps = async ({query}): Promise<{data: string | null}> => {
   let data = null
   if (query && query.data) {
     if (query.data instanceof Array) {
@@ -50,7 +50,7 @@ Home.getInitialProps = async ({ query }) => {
       data = query.data
     }
   }
-  return { data }
+  return {data}
 }
 
 export default Home

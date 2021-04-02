@@ -14,7 +14,7 @@ export enum Pronouns {
   Accords,
 }
 
-export const PronounList = (() => {
+export const PronounList = ((): Pronouns[] => {
   const result = []
   for (const p in Pronouns) {
     if (isNaN(Number(p))) {

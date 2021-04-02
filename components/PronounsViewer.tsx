@@ -28,7 +28,7 @@ const PronounsViewer: React.FunctionComponent<Props> = ({ manager }) => (
 
     <div className="container">
       {PronounList.map((pronoun, i) => (
-        <div className="containee">
+        <div key={pronoun} className="containee">
           <PronomCard key={i} manager={manager} pronoun={pronoun} />
         </div>
       ))}
