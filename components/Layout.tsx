@@ -1,7 +1,7 @@
 import {createGlobalStyle} from 'styled-components'
 import Head from 'next/head'
 import {pathPrefix} from 'config'
-import {ReactChild, ReactChildren} from 'react'
+import {ReactNode} from 'react'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -10,7 +10,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 export type LayoutProps = {
-  children: ReactChild | ReactChildren,
+  children: ReactNode,
 }
 
 export const Layout = ({children}: LayoutProps): JSX.Element => {

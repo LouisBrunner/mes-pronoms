@@ -5,8 +5,9 @@ Ce dépôt contient le code source de https://louisbrunner.github.io/mes-pronoms
 ## Roadmap
 
  - Tous les pronons/articles
- - Prononciation et phonétique
- - Générateur de phrases/exemples
+ - Meilleure interface
+ - Écran d'édition
+ - Button de partage
 
 ## Remerciements et références
 

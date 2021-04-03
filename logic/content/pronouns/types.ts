@@ -3,10 +3,10 @@ export interface IPronounDBEntry {
   readonly word: string;
   readonly ipa: string;
 }
-
 export type IPronounDB = IPronounDBEntry[]
 
-export type IPronounsChoice = Record<number, IPronounDBEntry>
+export type IPronounChoice = Omit<IPronounDBEntry, 'id'>
+export type IPronounsChoice = Record<number, IPronounChoice>
 
 export const convertDB = (db: IPronounDB): IPronounsChoice => {
   const choices: IPronounsChoice = {}
