@@ -5,7 +5,7 @@ Ce dépôt contient le code source de https://louisbrunner.github.io/mes-pronoms
 ## Roadmap
 
  - Tous les pronons/articles
- - Meilleure interface
+ - Meilleure interface (https://material-ui.com/ vs https://blueprintjs.com/ vs https://react.semantic-ui.com/ vs https://evergreen.segment.com/ vs https://ant.design/)
  - Écran d'édition
  - Button de partage
 

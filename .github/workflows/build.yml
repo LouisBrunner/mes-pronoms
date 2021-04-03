@@ -69,6 +69,6 @@ jobs:
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        enable_jekyll: true
+        enable_jekyll: false
         publish_dir: ./out
         force_orphan: true

@@ -5,7 +5,7 @@ module.exports = {
     webpack5: true,
   },
   assetPrefix: pathPrefix,
-  webpack(config) {
+  webpack(config, {webpack}) {
     config.module.rules.push({
       test: /\.tsx?$/,
       enforce: 'pre',
@@ -17,6 +17,7 @@ module.exports = {
         },
       }],
     })
+    config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
     return config
   },
 };
