@@ -1,5 +1,5 @@
 const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  pathPrefix: isProd ? '/mes-pronoms/' : '/',
+  pathPrefix: isProd ? '/mes-pronoms' : '',
 };
