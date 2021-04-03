@@ -1,6 +1,6 @@
 # Mes Pronoms ![Build Status][ci-image] [![Coverage Status][coveralls-image]][coveralls-url]
 
-Ce dépôt contient le code source de https://louisbrunner.github.io/mes-pronoms/, un outil qui permet de décrire vos pronoms français de manière unifiée.
+Ce dépôt contient le code source de [https://mes-pronoms.vercel.app/](https://mes-pronoms.vercel.app/), un outil qui permet de décrire vos pronoms français de manière unifiée.
 
 ## Roadmap
 

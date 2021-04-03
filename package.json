@@ -16,7 +16,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build && next export",
+    "build": "next build",
+    "export": "GHPAGES=yes next build && next export",
     "start": "next start",
     "typecheck": "tsc --project tsconfig.json --pretty --noEmit",
     "lint": "eslint --ext js,jsx,ts,tsx",
