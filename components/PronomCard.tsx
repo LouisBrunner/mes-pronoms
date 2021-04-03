@@ -1,10 +1,10 @@
-import React from 'react'
-import { Pronouns, IPronounsManager, IPronounChoice } from 'logic/IPronounsManager'
-import Content from 'logic/PronounsContent'
+import {IPronounChoice, TABLE} from 'logic/content/choices'
+import {GRAMMAR} from 'logic/content/grammar'
+import {IPronounStore, PronounKind} from 'logic/types'
 
-interface Props {
-  manager: IPronounsManager,
-  pronoun: Pronouns,
+interface PronomCardProps {
+  store: IPronounStore,
+  pronoun: PronounKind,
 }
 
 const findPronoun = (content: IPronounChoice | string, pronoun: number | string | undefined): string => {
@@ -24,10 +24,11 @@ const findPronoun = (content: IPronounChoice | string, pronoun: number | string 
   return content.choices[pronoun]
 }
 
-const PronomCard: React.FunctionComponent<Props> = ({ manager, pronoun }) => {
-  const content = Content[pronoun]
-  const singularChoice = findPronoun(content.choices.singular, manager.getPronoun(pronoun, true))
-  const pluralChoice = findPronoun(content.choices.plural, manager.getPronoun(pronoun, false))
+export const PronomCard = ({store, pronoun}: PronomCardProps): JSX.Element => {
+  const grammar = GRAMMAR.pronouns[pronoun]
+  const choices = TABLE.pronouns[pronoun]
+  const singularChoice = findPronoun(choices.singular, store.get(pronoun, true))
+  const pluralChoice = findPronoun(choices.plural, store.get(pronoun, false))
 
   return (
     <div className="card">
@@ -43,18 +44,16 @@ const PronomCard: React.FunctionComponent<Props> = ({ manager, pronoun }) => {
         }
       `}</style>
 
-      <h4>{content.text.title}</h4>
-      <p>{content.text.description}</p>
+      <h4>{grammar.title}</h4>
+      <p>{grammar.description}</p>
       <p>Il faut utiliser <strong>{singularChoice}/{pluralChoice}</strong></p>
       <div>
         Examples:
         <ul>
-          <li><em>Singulier</em>: {content.text.examples.singularWith(singularChoice)}</li>
-          <li><em>Pluriel</em>: {content.text.examples.pluralWith(pluralChoice)}</li>
+          <li><em>Singulier</em>: {grammar.examples.singularWith(singularChoice)}</li>
+          <li><em>Pluriel</em>: {grammar.examples.pluralWith(pluralChoice)}</li>
         </ul>
       </div>
     </div>
   )
 }
-
-export default PronomCard

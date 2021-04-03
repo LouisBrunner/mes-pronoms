@@ -1,5 +1,3 @@
-declare namespace config {
-  export const pathPrefix: boolean;
+declare module "config" {
+  export const pathPrefix: string
 }
-
-export = config
