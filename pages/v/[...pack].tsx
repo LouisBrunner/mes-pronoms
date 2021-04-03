@@ -15,7 +15,8 @@ const ViewPronouns: NextPage<ViewPronounsProps> = (): JSX.Element | null => {
   if (pack === undefined) {
     pack = null
   }
-  const store = usePronouns(isArray(pack) ? pack.join('/') : pack)
+  const data = isArray(pack) ? pack.join('/') : pack
+  const store = usePronouns(data)
 
   return (
     <Layout>

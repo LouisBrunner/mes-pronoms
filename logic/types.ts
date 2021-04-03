@@ -15,16 +15,15 @@ export type PronounKind =
   // 'Accords'
 
 // FIXME: not loving this...
-export const LIST: PronounKind[] = [
+export const PronounList: PronounKind[] = [
   'PronomSujet',
 ]
 
-type SamePluralT = 'SAME_PRONOUN'
-export const SamePlural: SamePluralT = 'SAME_PRONOUN'
-export type PronounPick = number | string | typeof SamePlural | undefined
+export type PronounPick = number | string
 
 export interface IPronounStore {
-  get(pronoun: PronounKind, singular: boolean): PronounPick,
-  set(pronoun: PronounKind, singular: boolean, choice: PronounPick): void,
+  get(pronoun: PronounKind): PronounPick | undefined,
+  set(pronoun: PronounKind, choice: PronounPick | undefined): void,
+
   export({compress}: {compress: boolean}): string,
 }

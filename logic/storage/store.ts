@@ -11,43 +11,19 @@ export class PronounStore implements IPronounStore {
     } else if (isStorage(data)) {
       this.#store = data
     } else {
-      this.#store = this.#deserialize(data)
+      this.#store = unpackStore(data)
     }
   }
 
-  public get(pronoun: PronounKind, singular: boolean): PronounPick {
-    const values = this.#store.pronouns[pronoun]
-    if (!values) {
-      return undefined
-    }
-    return singular ? values.singular : values.plural
+  get(pronoun: PronounKind): PronounPick | undefined {
+    return this.#store.pronouns[pronoun]
   }
 
-  public set(pronoun: PronounKind, singular: boolean, choice: PronounPick): void {
-    const values = this.#store.pronouns[pronoun]
-    if (singular) {
-      if (values === undefined) {
-        this.#store.pronouns[pronoun] = {singular: choice}
-      } else {
-        values.singular = choice
-      }
-    } else {
-      if (values === undefined) {
-        throw new Error('define the singular before the plural')
-      }
-      values.plural = choice
-    }
+  set(pronoun: PronounKind, choice: PronounPick | undefined): void {
+    this.#store.pronouns[pronoun] = choice
   }
 
-  public export(options: {compress: boolean}): string {
-    return this.#serialize(this.#store, options)
-  }
-
-  #deserialize = (raw: string): PronounsStorage => {
-    return unpackStore(raw)
-  }
-
-  #serialize = (store: PronounsStorage, options: {compress: boolean}): string => {
-    return packStore(store, options)
+  export(options: {compress: boolean}): string {
+    return packStore(this.#store, options)
   }
 }

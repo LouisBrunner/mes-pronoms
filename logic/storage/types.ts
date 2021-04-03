@@ -1,11 +1,8 @@
-import {PronounKind, SamePlural} from 'logic/types'
+import {PronounKind, PronounPick} from 'logic/types'
 
 export type PronounsStorage = {
   pronouns: {
-    [P in PronounKind]?: {
-      singular: number | string,
-      plural?: number | string | typeof SamePlural,
-    };
+    [P in PronounKind]?: PronounPick
   },
 }
 
