@@ -4,7 +4,8 @@ module.exports = {
   future: {
     webpack5: true,
   },
-  assetPrefix: pathPrefix,
+  basePath: pathPrefix,
+  // assetPrefix: pathPrefix,
   webpack(config, {webpack}) {
     config.module.rules.push({
       test: /\.tsx?$/,

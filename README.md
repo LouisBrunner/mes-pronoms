@@ -23,5 +23,5 @@ Références:
 MIT, Copyright (c) 2019-2021 Louis Brunner
 
 [ci-image]: https://github.com/LouisBrunner/mes-pronoms/workflows/Build/badge.svg
-[coveralls-image]: https://coveralls.io/repos/github/LouisBrunner/mes-pronoms/badge.svg?branch=master
-[coveralls-url]: https://coveralls.io/github/LouisBrunner/mes-pronoms?branch=master
+[coveralls-image]: https://coveralls.io/repos/github/LouisBrunner/mes-pronoms/badge.svg?branch=main
+[coveralls-url]: https://coveralls.io/github/LouisBrunner/mes-pronoms?branch=main
