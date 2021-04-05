@@ -1,3 +1,4 @@
+import EventTarget from '@ungap/event-target'
 import {IPronounStore, PronounKind, PronounPick, PronounChangeEventDetails, ExportOptions} from 'logic/types'
 import {packStore, unpackStore} from 'logic/storage/packing'
 import {emptyStorage, isStorage, PronounsStorage} from 'logic/storage/types'

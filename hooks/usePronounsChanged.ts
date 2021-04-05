@@ -1,9 +1,9 @@
-import {IPronounStore} from 'logic/types'
+import {IPronounStore, PronounChangeEvent} from 'logic/types'
 import {useEffect} from 'react'
 
 export type usePronounsChangedProps = {
   store: IPronounStore,
-  observer: () => void,
+  observer: (e: PronounChangeEvent) => void,
 }
 
 export const usePronounsChanged = ({store, observer}: usePronounsChangedProps): void => {

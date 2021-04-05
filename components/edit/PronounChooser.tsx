@@ -30,14 +30,10 @@ type DisplayContentProps = {
 
 const DisplayContent = ({grammar, choice}: DisplayContentProps): JSX.Element | null => {
   const {isValid} = useFormikContext<FormValues>()
-
-  return (
-    isValid && choice ? (
-      <PronounChoice choice={choice} grammar={grammar} />
-    ): (
-      null
-    )
-  )
+  if (!isValid || !choice) {
+    return null
+  }
+  return <PronounChoice choice={choice} grammar={grammar} />
 }
 
 export interface PronounChooserProps {
@@ -50,9 +46,10 @@ export const PronounChooser = ({store, pronoun, onValid}: PronounChooserProps): 
   const grammar = fetchGrammar(pronoun)
   const [picked, setPicked] = useState(store.get(pronoun))
   const choice = choosePronoun(pronoun, picked)
+  const [initialFormValues, setInitialFormValues] = useState(transformToForm(picked))
 
   const form: FormikConfig<FormValues> = {
-    initialValues: transformToForm(picked),
+    initialValues: initialFormValues,
     enableReinitialize: true,
     validationSchema: schema,
     onSubmit: (values) => {
@@ -64,8 +61,10 @@ export const PronounChooser = ({store, pronoun, onValid}: PronounChooserProps): 
 
   // FIXME: nextjs ssr?
   useEffect(() => {
-    setPicked(store.get(pronoun))
-  }, [store, pronoun, setPicked])
+    const picked = store.get(pronoun)
+    setPicked(picked)
+    setInitialFormValues(transformToForm(picked))
+  }, [store, pronoun, setPicked, setInitialFormValues])
 
   return (
     <Formik {...form}>

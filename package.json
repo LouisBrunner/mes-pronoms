@@ -26,6 +26,7 @@
     "test:ci": "CI=yes npm run test"
   },
   "dependencies": {
+    "@ungap/event-target": "^0.2.2",
     "formik": "^2.2.6",
     "lz-string": "^1.4.4",
     "next": "10.1.3",

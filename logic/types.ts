@@ -1,3 +1,5 @@
+import EventTarget from '@ungap/event-target'
+
 export type PronounKind =
   'PronomSujet'
   // TODO: complete later
