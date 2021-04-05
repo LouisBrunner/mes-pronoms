@@ -1,12 +1,12 @@
 import {ExportOptions} from 'logic/types'
-import {WIRE_FORMATS, PB_FORMAT, TEXT_FORMAT} from 'logic/storage/format'
+import {WIRE_FORMATS, LZ_FORMAT, TEXT_FORMAT} from 'logic/storage/format'
 import {PronounsStorage} from 'logic/storage/types'
 
 const HEADER_DELIM = '-'
 
 export const isCompressed = (raw: string): boolean => {
   const format = raw[0]
-  return WIRE_FORMATS[format] == PB_FORMAT
+  return WIRE_FORMATS[format] == LZ_FORMAT
 }
 
 // FIXME: Binary packing should use protobuf or similar?
@@ -23,6 +23,6 @@ export const unpackStore = (raw: string): PronounsStorage => {
 }
 
 export const packStore = (store: PronounsStorage, {compress}: ExportOptions): string => {
-  const format = compress ? PB_FORMAT : TEXT_FORMAT
+  const format = compress ? LZ_FORMAT : TEXT_FORMAT
   return [format.prefix, format.compress(store)].join(HEADER_DELIM)
 }

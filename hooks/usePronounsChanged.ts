@@ -8,7 +8,6 @@ export type usePronounsChangedProps = {
 
 export const usePronounsChanged = ({store, observer}: usePronounsChangedProps): void => {
   useEffect(() => {
-    observer()
     store.addEventListener('changed', observer)
     return (): void => {
       store.removeEventListener('changed', observer)

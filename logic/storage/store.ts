@@ -2,6 +2,7 @@ import {IPronounStore, PronounKind, PronounPick, PronounChangeEventDetails, Expo
 import {packStore, unpackStore} from 'logic/storage/packing'
 import {emptyStorage, isStorage, PronounsStorage} from 'logic/storage/types'
 import {ensureChoice} from 'logic/business'
+import {benchmarkFormats} from './format'
 
 export class PronounStore extends EventTarget implements IPronounStore {
   #store: PronounsStorage
@@ -21,6 +22,15 @@ export class PronounStore extends EventTarget implements IPronounStore {
         const err = e as Error
         console.error(`failed to parse: ${err.message}`)
         this.#store = emptyStorage()
+      }
+    }
+
+    // FIXME: debug
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore: debug code
+      window.benchmarkFormats = (store: PronounsStorage = this.#store): Record<string, string> => {
+        return benchmarkFormats(store)
       }
     }
   }

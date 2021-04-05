@@ -10,6 +10,6 @@ export const isArray = <T>(thing: T | T[]): thing is T[] => {
   return (thing as T[])?.length !== undefined
 }
 
-export const identity = (s: string): string => {
+export const identity = <T>(s: T): T => {
   return s
 }

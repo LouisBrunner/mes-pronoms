@@ -40,23 +40,12 @@ const compress = (store: PronounsStorage): string => {
       content = {content: 'write_in', write_in: current}
     }
     pronouns.push(content)
-    for (let i = 0; i < 200; ++i) {
-      if (i % 2 == 0) {
-        pronouns.push({content: 'choice', choice: Math.round(Math.random() * 100)})
-      } else {
-        pronouns.push({content: 'write_in', choice: `${Math.random()}`.slice(0, 5)})
-      }
-    }
   }
 
   const obj = {pronouns}
-  console.log(obj)
   const pbf = new Pbf()
   proto.Config.write(obj, pbf)
-  const buf2 = pbf.finish()
-  console.log(1, buf2, buf2.length)
-  const buffer = pako.deflate(buf2)
-  console.log(2, buffer, buffer.length)
+  const buffer = pako.deflate(pbf.finish())
   return encodeURIComponent(util.base64.encode(buffer, 0, buffer.length))
 }
 
@@ -75,13 +64,9 @@ const decompress = (plain: string): PronounsStorage => {
 
   const bigBuffer = new Uint8Array(plain.length)
   const len = util.base64.decode(decodeURIComponent(plain), bigBuffer, 0)
-  const buf2 = bigBuffer.subarray(0, len)
-  console.log(3, buf2, buf2.length)
   const buffer = pako.inflate(bigBuffer.subarray(0, len))
-  console.log(4, buffer, buffer.length)
   const pbf = new Pbf(buffer)
   const obj = proto.Config.read(pbf) as ConfigObject
-  console.log(obj)
   if (obj.pronouns.length > PronounList.length) {
     throw new Error(`invalid number of pronouns '${obj.pronouns.length} vs ${PronounList.length}'`)
   }
@@ -99,7 +84,7 @@ const decompress = (plain: string): PronounsStorage => {
       continue
     }
     if (current.content === 'choice') {
-      // FIXME: silly??
+      // FIXME: toString silly??
       store.pronouns[pronoun] = parseChoice(pronoun, current.choice.toString())
     } else {
       store.pronouns[pronoun] = ensureChoice(pronoun, current.write_in)
