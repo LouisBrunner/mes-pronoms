@@ -19,5 +19,5 @@ export const PronounShortForm = ({store}: PronounShortFormProps): JSX.Element =>
     }
   }, [store, setShortForm])
 
-  return <div>{shortForm}</div>
+  return <div>Référence: {shortForm}</div>
 }

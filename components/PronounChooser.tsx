@@ -1,10 +1,44 @@
-import {choosePronoun, fetchGrammar} from 'logic/business'
-import {IPronounStore, PronounChangeEvent, PronounKind} from 'logic/types'
+import {choosePronoun, ChosenPronoun, fetchGrammar} from 'logic/business'
+import {IPronounStore, PronounKind} from 'logic/types'
 import {PronounChoice} from 'components/PronounChoice'
-import {useForm, FormProvider} from 'react-hook-form'
 import {FormValues, PronounChooserForm, schema, transformFromForm, transformToForm} from 'components/PronounChooserForm'
-import {yupResolver} from '@hookform/resolvers/yup'
-import {useCallback, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
+import {Formik, FormikConfig, useFormikContext} from 'formik'
+import {IPronounContent} from 'logic/content/grammar'
+
+type AutoSubmitProps = {
+  onValid: (valid: boolean) => void,
+}
+
+const AutoSubmit = ({onValid}: AutoSubmitProps): null => {
+  const {values, isValid, submitForm} = useFormikContext()
+  useEffect(() => {
+    // FIXME: react's fault
+    // eslint-disable-next-line  @typescript-eslint/no-floating-promises
+    submitForm()
+  }, [values, submitForm])
+  useEffect(() => {
+    onValid(isValid)
+  }, [isValid, onValid])
+  return null
+}
+
+type DisplayContentProps = {
+  grammar: IPronounContent,
+  choice: ChosenPronoun,
+}
+
+const DisplayContent = ({grammar, choice}: DisplayContentProps): JSX.Element | null => {
+  const {isValid} = useFormikContext<FormValues>()
+
+  return (
+    isValid && choice ? (
+      <PronounChoice choice={choice} grammar={grammar} />
+    ): (
+      null
+    )
+  )
+}
 
 export interface PronounChooserProps {
   store: IPronounStore,
@@ -17,53 +51,31 @@ export const PronounChooser = ({store, pronoun, onValid}: PronounChooserProps): 
   const [picked, setPicked] = useState(store.get(pronoun))
   const choice = choosePronoun(pronoun, picked)
 
-  const methods = useForm<FormValues>({
-    mode: 'onChange',
-    defaultValues: transformToForm(picked),
-    resolver: yupResolver(schema),
-  })
-  const {formState, reset} = methods
+  const form: FormikConfig<FormValues> = {
+    initialValues: transformToForm(picked),
+    enableReinitialize: true,
+    validationSchema: schema,
+    onSubmit: (values) => {
+      const newValue = transformFromForm(values)
+      store.set(pronoun, newValue)
+      setPicked(newValue)
+    },
+  }
 
-
-
-  methods.watch(useCallback((values) => {
-    console.log('watch', values, transformFromForm(values))
-    store.set(pronoun, transformFromForm(values))
-    console.log(formState)
-    onValid(formState.isValid)
-  }, [store, pronoun, onValid, formState]))
-
+  // FIXME: nextjs ssr?
   useEffect(() => {
-    // FIXME: nextjs SSR?
-    const currentPicked = store.get(pronoun)
-    setPicked(currentPicked)
-    reset(transformToForm(currentPicked))
-    console.log('use effect')
-
-    const observer = (e: PronounChangeEvent): void => {
-      if (e.detail.pronoun !== pronoun) {
-        return
-      }
-      setPicked(e.detail.choice)
-    }
-    store.addEventListener('changed', observer)
-    return (): void => {
-      store.removeEventListener('changed', observer)
-    }
-  }, [setPicked, store, pronoun, reset])
+    setPicked(store.get(pronoun))
+  }, [store, pronoun, setPicked])
 
   return (
-    <FormProvider {...methods}>
+    <Formik {...form}>
       <div>
         <h4>{grammar.title}</h4>
         <p>{grammar.description}</p>
+        <AutoSubmit onValid={onValid} />
         <PronounChooserForm pronoun={pronoun} />
-        {choice === undefined ? (
-          null
-        ) : (
-          <PronounChoice choice={choice} grammar={grammar} />
-        )}
+        <DisplayContent grammar={grammar} choice={choice} />
       </div>
-    </FormProvider>
+    </Formik>
   )
 }

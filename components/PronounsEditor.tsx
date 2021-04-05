@@ -10,7 +10,6 @@ export interface PronounsEditorProps {
 export const PronounsEditor = ({store, onValid}: PronounsEditorProps): JSX.Element => {
   const validPronouns = useRef<Partial<Record<PronounKind, boolean>>>({})
   const setValid = useCallback((pronoun: PronounKind, valid: boolean): void => {
-    console.log(pronoun, valid)
     validPronouns.current[pronoun] = valid
     const reduced = PronounList.reduce<boolean>((allValid: boolean, pronoun: PronounKind): boolean => {
       return validPronouns.current[pronoun] && allValid

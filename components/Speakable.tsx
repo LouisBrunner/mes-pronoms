@@ -16,7 +16,7 @@ export const Speakable = ({ipa, word, children}: SpeakableProps): JSX.Element =>
 
   return (
     <span>
-      {children} <button onClick={speech.speak}>Lire</button>
+      {children} <button onClick={speech.speak}>Écouter</button>
     </span>
   )
 }

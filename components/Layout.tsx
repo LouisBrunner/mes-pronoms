@@ -2,6 +2,7 @@ import {createGlobalStyle} from 'styled-components'
 import Head from 'next/head'
 import {pathPrefix} from 'config'
 import {ReactNode} from 'react'
+import Link from 'next/link'
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -26,6 +27,8 @@ export const Layout = ({children}: LayoutProps): JSX.Element => {
         <link rel="icon" type="image/png" sizes="16x16" href={`${pathPrefix}/favicon-16x16.png`} />
         <link rel="manifest" href={`${pathPrefix}/site.webmanifest`} />
       </Head>
+
+      <h2><Link href="/">Mes Pronoms</Link></h2>
 
       {children}
     </>

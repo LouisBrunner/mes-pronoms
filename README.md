@@ -7,8 +7,6 @@ Ce dépôt contient le code source de [https://mes-pronoms.vercel.app/](https://
  - Tous les pronoms/articles
  - Meilleure interface (https://material-ui.com/ vs https://blueprintjs.com/ vs https://react.semantic-ui.com/ vs https://evergreen.segment.com/ vs https://ant.design/)
  - Protobuf for Z format
- - Improve yup
- - Update URL on edit
  - Finish shortForm
 
 ## Remerciements et références

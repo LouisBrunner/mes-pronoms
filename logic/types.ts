@@ -36,5 +36,6 @@ export interface IPronounStore extends EventTarget {
   set(pronoun: PronounKind, choice: PronounPick | undefined): void,
 
   shortForm(): string,
+
   export({compress}: ExportOptions): string,
 }

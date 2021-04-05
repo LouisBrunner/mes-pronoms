@@ -3,8 +3,8 @@ import {PronounList, PronounKind, ExportOptions} from 'logic/types'
 import {WIRE_FORMATS, LZ_FORMAT, TEXT_FORMAT} from 'logic/storage/format'
 import {emptyStorage, PronounsStorage} from 'logic/storage/types'
 
-const HEADER_DELIM = '/'
-const PRONOUN_DELIM = '/'
+const HEADER_DELIM = '-'
+const PRONOUN_DELIM = ','
 
 const ensureChoice = (pronoun: PronounKind, unescape: (s: string) => string, s: string): string | number => {
   const n = parseInt(s, 10)
@@ -16,6 +16,11 @@ const ensureChoice = (pronoun: PronounKind, unescape: (s: string) => string, s: 
     throw new Error(`invalid choice '${n}' for ${pronoun}`)
   }
   return n
+}
+
+export const isCompressed = (raw: string): boolean => {
+  const format = raw[0]
+  return WIRE_FORMATS[format] == LZ_FORMAT
 }
 
 // FIXME: Binary packing should use protobuf or similar?

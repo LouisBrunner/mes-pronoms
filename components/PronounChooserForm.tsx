@@ -1,8 +1,7 @@
+import {ErrorMessage, Field, useField} from 'formik'
 import {TABLE} from 'logic/content/choices'
-import {useFormContext, useWatch} from 'react-hook-form'
 import {PronounKind, PronounList, PronounPick} from 'logic/types'
 import * as yup from 'yup'
-import {ErrorMessage} from './ErrorMessage'
 
 export type Invalid = 'invalid'
 export type WriteIn = 'write_in'
@@ -25,8 +24,16 @@ const Options = ((): Partial<Record<PronounKind, Option[]>> => {
 
 
 export const schema = yup.object().shape({
-  choice: yup.string().required(),
-  custom: yup.string(),
+  choice: yup.string()
+    .required()
+    .notOneOf(['invalid'], 'Vous devez renseignez un pronom'),
+  custom: yup.string()
+    .when('choice', {
+      is: 'write_in',
+      then: yup.string()
+        .required('Vous devez renseignez Autre'),
+      otherwise: yup.string(),
+    }),
 })
 
 export type FormValues = {
@@ -66,27 +73,25 @@ export type PronounChooserFormProps = {
 }
 
 export const PronounChooserForm = ({pronoun}: PronounChooserFormProps): JSX.Element => {
-  const {register, control} = useFormContext<FormValues>()
-  const choice = useWatch<FormValues>({
-    control,
-    name: 'choice',
-  })
+  const [_, {value: choice}] = useField<FormValues['choice']>('choice')
 
   return (
     <>
-      <label htmlFor="choose_pronoun">Pronom: </label>
-      <select id="choose_pronoun" {...register('choice')}>
-        {Options[pronoun].map(([value, text]) => {
-          return <option key={value} value={value}>{text}</option>
-        })}
-      </select>
-      <ErrorMessage name="choice" />
+      <div>
+        <label htmlFor="choose_pronoun">Pronom: </label>
+        <Field as="select" name="choice" id="choose_pronoun">
+          {Options[pronoun].map(([value, text]) => {
+            return <option key={value} value={value}>{text}</option>
+          })}
+        </Field>
+        <ErrorMessage name="choice" />
+      </div>
       {choice === 'write_in' ? (
-        <>
+        <div>
           <label htmlFor="custom_pronoun">Autre: </label>
-          <input type="text" id="custom_pronoun" {...register('custom')} />
+          <Field name="custom" type="text" id="custom_pronoun" />
           <ErrorMessage name="custom" />
-        </>
+        </div>
       ) : null}
     </>
   )

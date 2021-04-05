@@ -15,6 +15,7 @@ const Home: NextPage<HomeProps> = (): JSX.Element => {
       <p>Ce site vous permet de facilement montrer et expliquer les pronoms que vous souhaitez utiliser.</p>
       <p>La langue française est extrêmement genrée et j&apos;espère que cet outil vous aidera à retenir les tournures de phrases à utiliser avec des néo-pronoms.</p>
       <p>Voici un exemple d&apos;utilisation: <Link href={`/v/${packStore(IEL, {compress: true})}`}>cliquer ici</Link></p>
+      <p>Tu peux faire ta propre sélection <Link href="/e/">ici</Link></p>
     </Layout>
   )
 }

@@ -15,7 +15,13 @@ export class PronounStore extends EventTarget implements IPronounStore {
     } else if (isStorage(data)) {
       this.#store = data
     } else {
-      this.#store = unpackStore(data)
+      try {
+        this.#store = unpackStore(data)
+      } catch (e) {
+        const err = e as Error
+        console.error(`failed to parse: ${err.message}`)
+        this.#store = emptyStorage()
+      }
     }
   }
 
@@ -39,7 +45,7 @@ export class PronounStore extends EventTarget implements IPronounStore {
     // const pieces = []
 
     // return pieces.join(' / ')
-    return ''
+    return 'N/A'
   }
 
   export(options: ExportOptions): string {
