@@ -1,5 +1,5 @@
 import React from 'react'
-import {PronounView} from 'components/PronounView'
+import {PronounView} from 'components/view/PronounView'
 import {IPronounStore, PronounList} from 'logic/types'
 
 interface PronounsViewerProps {

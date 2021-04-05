@@ -1,6 +1,6 @@
 import {choosePronoun, fetchGrammar} from 'logic/business'
 import {IPronounStore, PronounKind} from 'logic/types'
-import {PronounChoice} from 'components/PronounChoice'
+import {PronounChoice} from 'components/view/PronounChoice'
 
 interface PronounViewProps {
   store: IPronounStore,

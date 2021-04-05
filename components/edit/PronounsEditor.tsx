@@ -1,4 +1,4 @@
-import {PronounChooser} from 'components/PronounChooser'
+import {PronounChooser} from 'components/edit/PronounChooser'
 import {IPronounStore, PronounKind, PronounList} from 'logic/types'
 import {useCallback, useRef} from 'react'
 

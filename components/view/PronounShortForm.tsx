@@ -1,5 +1,6 @@
 import {IPronounStore} from 'logic/types'
 import {useEffect, useState} from 'react'
+import {Copiable} from 'components/basic/Copiable'
 
 export type PronounShortFormProps = {
   store: IPronounStore,
@@ -19,5 +20,5 @@ export const PronounShortForm = ({store}: PronounShortFormProps): JSX.Element =>
     }
   }, [store, setShortForm])
 
-  return <div>Référence: {shortForm}</div>
+  return <div>Référence: <Copiable>{shortForm}</Copiable></div>
 }

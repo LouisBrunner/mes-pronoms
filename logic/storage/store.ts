@@ -1,8 +1,8 @@
 import {IPronounStore, PronounKind, PronounPick, PronounChangeEventDetails, ExportOptions} from 'logic/types'
 import {packStore, unpackStore} from 'logic/storage/packing'
 import {emptyStorage, isStorage, PronounsStorage} from 'logic/storage/types'
-import {ensureChoice} from 'logic/business'
-import {benchmarkFormats} from './format'
+import {ensureChoice, choosePronoun} from 'logic/business'
+import {benchmarkFormats} from 'logic/storage/format'
 
 export class PronounStore extends EventTarget implements IPronounStore {
   #store: PronounsStorage
@@ -56,11 +56,17 @@ export class PronounStore extends EventTarget implements IPronounStore {
   }
 
   shortForm(): string {
-    // TODO: finish
-    // const pieces = []
-
-    // return pieces.join(' / ')
-    return 'N/A'
+    const includes: PronounKind[] = [
+      'PronomSujet',
+    ]
+    if (includes.find((pronoun) => {
+      return this.#store.pronouns[pronoun] === undefined
+    })) {
+      return 'N/A'
+    }
+    return includes.map((pronoun) => {
+      return choosePronoun(pronoun, this.#store.pronouns[pronoun]).word
+    }).join('/')
   }
 
   export(options: ExportOptions): string {
