@@ -1,32 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
 import {util} from 'protobufjs/light'
 import {emptyStorage, PronounsStorage} from 'logic/storage/types'
 import {WireFormat} from 'logic/storage/format/types'
 import {PronounList} from 'logic/types'
 import {ensureChoice, parseChoice} from 'logic/business'
-import protobuf from './format.proto'
+import {ConfigMessage} from './format.proto'
 import Pbf from 'pbf'
 import pako from 'pako'
 
 // FIXME: mix-matching the proto libraries because neither are good
 
-const proto = {
-  loaded: false,
-  Pronoun: undefined,
-  Config: undefined,
-}
-const loadDefinitions = (): void => {
-  if (proto.loaded) {
-    return
-  }
-  proto.Config = protobuf.ConfigMessage
-  proto.Pronoun = protobuf.PronounMessage
-  proto.loaded = true
-}
-
 const compress = (store: PronounsStorage): string => {
-  loadDefinitions()
-
   const pronouns = []
   for (const pronoun of PronounList) {
     const current = store.pronouns[pronoun]
@@ -44,7 +27,7 @@ const compress = (store: PronounsStorage): string => {
 
   const obj = {pronouns}
   const pbf = new Pbf()
-  proto.Config.write(obj, pbf)
+  ConfigMessage.write(obj, pbf)
   const buffer = pako.deflate(pbf.finish())
   return encodeURIComponent(util.base64.encode(buffer, 0, buffer.length))
 }
@@ -60,13 +43,11 @@ type PronounObject = {
 }
 
 const decompress = (plain: string): PronounsStorage => {
-  loadDefinitions()
-
   const bigBuffer = new Uint8Array(plain.length)
   const len = util.base64.decode(decodeURIComponent(plain), bigBuffer, 0)
   const buffer = pako.inflate(bigBuffer.subarray(0, len))
   const pbf = new Pbf(buffer)
-  const obj = proto.Config.read(pbf) as ConfigObject
+  const obj = ConfigMessage.read(pbf) as ConfigObject
   if (obj.pronouns.length > PronounList.length) {
     throw new Error(`invalid number of pronouns '${obj.pronouns.length} vs ${PronounList.length}'`)
   }
