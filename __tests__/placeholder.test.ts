@@ -5,4 +5,5 @@ describe('placeholder', () => {
 })
 
 // FIXME: remove when they are actual tests
+// eslint-disable-next-line jest/no-export
 export {}

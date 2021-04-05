@@ -9,11 +9,13 @@ module.exports = {
   collectCoverageFrom: [
     '!.next/**/*',
     '!node_modules/**/*',
+    '!coverage/**/*',
     '!out/**/*',
     '!**/*.d.ts',
     '!**/*.json',
   ],
   testPathIgnorePatterns: [
+    '/coverage/',
     '/node_modules/',
     '/.next/',
     '/out/',
