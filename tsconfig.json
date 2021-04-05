@@ -10,6 +10,7 @@
       "dom.iterable",
       "esnext"
     ],
+    "experimentalDecorators": true,
     "allowJs": false,
     "skipLibCheck": true,
     "strict": false,

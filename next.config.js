@@ -8,6 +8,10 @@ module.exports = {
   // assetPrefix: pathPrefix,
   webpack(config, {webpack}) {
     config.module.rules.push({
+      test: /\.proto$/,
+      loader: 'pbf-loader',
+    })
+    config.module.rules.push({
       test: /\.tsx?$/,
       enforce: 'pre',
       use: [{

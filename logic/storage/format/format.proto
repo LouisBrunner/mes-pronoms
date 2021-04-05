@@ -1,0 +1,13 @@
+syntax = "proto3";
+package format;
+
+message PronounMessage {
+  oneof content {
+    uint32 choice = 1;
+    string write_in = 2;
+  }
+}
+
+message ConfigMessage {
+  repeated PronounMessage pronouns = 1;
+}

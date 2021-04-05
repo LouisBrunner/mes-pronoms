@@ -9,3 +9,7 @@ export const pluralize = (word: string): string => {
 export const isArray = <T>(thing: T | T[]): thing is T[] => {
   return (thing as T[])?.length !== undefined
 }
+
+export const identity = (s: string): string => {
+  return s
+}

@@ -16,8 +16,8 @@ type ViewPronounsProps = {
 const ViewPronouns: NextPage<ViewPronounsProps> = (): JSX.Element => {
   const router = useRouter()
   const {store, compressed: compress} = usePackedPronouns()
-
   const [tinyURL, setTinyURL] = useState(compress)
+
   const onTinyURLChange = useCallback(async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const newValue = e.target.checked
     setTinyURL(newValue)
@@ -43,7 +43,7 @@ const ViewPronouns: NextPage<ViewPronounsProps> = (): JSX.Element => {
   return (
     <Layout>
       <PronounShortForm store={store} />
-      <Link href={makeURL('e', store, {compress})}>Editer</Link>
+      <Link href={makeURL('e', store, {compress: tinyURL})}>Editer</Link>
 
       <button onClick={doShare}>Partager</button>
       <>

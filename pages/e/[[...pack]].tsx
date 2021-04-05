@@ -2,11 +2,12 @@ import {Layout} from 'components/Layout'
 import {PronounsEditor} from 'components/PronounsEditor'
 import {PronounShortForm} from 'components/PronounShortForm'
 import {usePackedPronouns} from 'hooks/usePackedPronouns'
+import {usePronounsChanged} from 'hooks/usePronounsChanged'
 import {makeURL} from 'logic/helpers'
 import {NextPage} from 'next'
 import Link from 'next/link'
 import {useRouter} from 'next/router'
-import {useEffect, useState} from 'react'
+import {useCallback, useEffect, useState} from 'react'
 
 type EditPronounsProps = {
   empty?: undefined,
@@ -23,20 +24,10 @@ const EditPronouns: NextPage<EditPronounsProps> = (): JSX.Element => {
     setViewURL(makeURL('v', store, {compress}))
   }, [store, compress, setViewURL])
 
-  useEffect(() => {
-    const observer = async (): Promise<void> => {
-      setViewURL(makeURL('v', store, {compress}))
-      await router.replace(makeURL('e', store, {compress}), undefined, {shallow: true})
-    }
-
-    // FIXME: wtf eslint?
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    store.addEventListener('changed', observer)
-    return (): void => {
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      store.removeEventListener('changed', observer)
-    }
-  }, [router, store, setViewURL, compress])
+  usePronounsChanged({store, observer: useCallback(async () => {
+    setViewURL(makeURL('v', store, {compress}))
+    await router.replace(makeURL('e', store, {compress}), undefined, {shallow: true})
+  }, [router, setViewURL, compress, store])})
 
   return (
     <Layout>

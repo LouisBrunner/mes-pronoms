@@ -1,6 +1,7 @@
 import {IPronounStore, PronounKind, PronounPick, PronounChangeEventDetails, ExportOptions} from 'logic/types'
 import {packStore, unpackStore} from 'logic/storage/packing'
 import {emptyStorage, isStorage, PronounsStorage} from 'logic/storage/types'
+import {ensureChoice} from 'logic/business'
 
 export class PronounStore extends EventTarget implements IPronounStore {
   #store: PronounsStorage
@@ -9,7 +10,6 @@ export class PronounStore extends EventTarget implements IPronounStore {
   constructor(data: PronounsStorage | string | null) {
     super()
     this.#cachedExport = {}
-
     if (data === null) {
       this.#store = emptyStorage()
     } else if (isStorage(data)) {
@@ -29,7 +29,12 @@ export class PronounStore extends EventTarget implements IPronounStore {
     return this.#store.pronouns[pronoun]
   }
 
-  set(pronoun: PronounKind, choice: PronounPick | undefined): void {
+  set(pronoun: PronounKind, choiceRaw: PronounPick | undefined): void {
+    let choice = choiceRaw
+    if (typeof choiceRaw === 'string') {
+      choice = ensureChoice(pronoun, choiceRaw)
+    }
+
     if (this.#store.pronouns[pronoun] === choice) {
       return
     }
