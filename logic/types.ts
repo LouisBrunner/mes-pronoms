@@ -21,9 +21,20 @@ export const PronounList: PronounKind[] = [
 
 export type PronounPick = number | string
 
-export interface IPronounStore {
+export type PronounChangeEventDetails = {
+  pronoun: PronounKind,
+  choice: PronounPick | undefined,
+}
+export type PronounChangeEvent = CustomEvent<PronounChangeEventDetails>
+
+export type ExportOptions = {
+  compress: boolean,
+}
+
+export interface IPronounStore extends EventTarget {
   get(pronoun: PronounKind): PronounPick | undefined,
   set(pronoun: PronounKind, choice: PronounPick | undefined): void,
 
-  export({compress}: {compress: boolean}): string,
+  shortForm(): string,
+  export({compress}: ExportOptions): string,
 }

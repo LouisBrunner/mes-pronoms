@@ -1,4 +1,4 @@
-import {convertDB, IPronounDB} from './types'
+import {convertDB, IPronounDB} from 'logic/content/pronouns/types'
 
 export const PronomSujetDB: IPronounDB = [
   {id: 0, word: 'iel', ipa: 'jɛl'},

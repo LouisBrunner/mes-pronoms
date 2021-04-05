@@ -6,12 +6,18 @@ export interface IPronounDBEntry {
 export type IPronounDB = IPronounDBEntry[]
 
 export type IPronounChoice = Omit<IPronounDBEntry, 'id'>
-export type IPronounsChoice = Record<number, IPronounChoice>
+export type IPronounsChoice = {
+  lookup: Record<number, IPronounChoice>,
+  db: IPronounDB,
+}
 
 export const convertDB = (db: IPronounDB): IPronounsChoice => {
-  const choices: IPronounsChoice = {}
+  const choices: IPronounsChoice = {
+    lookup: {},
+    db,
+  }
   for (const entry of db) {
-    choices[entry.id] = entry
+    choices.lookup[entry.id] = entry
   }
   return choices
 }

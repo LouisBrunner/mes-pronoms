@@ -1,11 +1,15 @@
-import {IPronounStore, PronounKind, PronounPick} from 'logic/types'
-import {packStore, unpackStore} from './packing'
-import {emptyStorage, isStorage, PronounsStorage} from './types'
+import {IPronounStore, PronounKind, PronounPick, PronounChangeEventDetails, ExportOptions} from 'logic/types'
+import {packStore, unpackStore} from 'logic/storage/packing'
+import {emptyStorage, isStorage, PronounsStorage} from 'logic/storage/types'
 
-export class PronounStore implements IPronounStore {
+export class PronounStore extends EventTarget implements IPronounStore {
   #store: PronounsStorage
+  #cachedExport: Record<string, string>
 
   constructor(data: PronounsStorage | string | null) {
+    super()
+    this.#cachedExport = {}
+
     if (data === null) {
       this.#store = emptyStorage()
     } else if (isStorage(data)) {
@@ -20,10 +24,30 @@ export class PronounStore implements IPronounStore {
   }
 
   set(pronoun: PronounKind, choice: PronounPick | undefined): void {
+    if (this.#store.pronouns[pronoun] === choice) {
+      return
+    }
     this.#store.pronouns[pronoun] = choice
+    this.#cachedExport = {}
+    this.dispatchEvent(
+      new CustomEvent<PronounChangeEventDetails>('changed', {detail: {pronoun, choice}}),
+    )
   }
 
-  export(options: {compress: boolean}): string {
-    return packStore(this.#store, options)
+  shortForm(): string {
+    // TODO: finish
+    // const pieces = []
+
+    // return pieces.join(' / ')
+    return ''
+  }
+
+  export(options: ExportOptions): string {
+    const cacheKey = options.compress ? 'compressed' : 'non-compress'
+    if (this.#cachedExport?.[cacheKey] !== undefined) {
+      return this.#cachedExport[cacheKey]
+    }
+    this.#cachedExport[cacheKey] = packStore(this.#store, options)
+    return this.#cachedExport[cacheKey]
   }
 }

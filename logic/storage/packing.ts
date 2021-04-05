@@ -1,8 +1,7 @@
 import {TABLE} from 'logic/content/choices'
-import {PronounList, PronounKind} from 'logic/types'
-import {WIRE_FORMATS} from './format'
-import {LZ_FORMAT, TEXT_FORMAT} from './format'
-import {emptyStorage, PronounsStorage} from './types'
+import {PronounList, PronounKind, ExportOptions} from 'logic/types'
+import {WIRE_FORMATS, LZ_FORMAT, TEXT_FORMAT} from 'logic/storage/format'
+import {emptyStorage, PronounsStorage} from 'logic/storage/types'
 
 const HEADER_DELIM = '/'
 const PRONOUN_DELIM = '/'
@@ -12,7 +11,7 @@ const ensureChoice = (pronoun: PronounKind, unescape: (s: string) => string, s: 
   if (isNaN(n)) {
     return unescape(s)
   }
-  const choice = TABLE.pronouns[pronoun]
+  const choice = TABLE.pronouns[pronoun].lookup
   if (choice[n] === undefined) {
     throw new Error(`invalid choice '${n}' for ${pronoun}`)
   }
@@ -47,7 +46,7 @@ export const unpackStore = (raw: string): PronounsStorage => {
   return store
 }
 
-export const packStore = (store: PronounsStorage, {compress}: {compress: boolean}): string => {
+export const packStore = (store: PronounsStorage, {compress}: ExportOptions): string => {
   const format = compress ? LZ_FORMAT : TEXT_FORMAT
 
   const list = []
