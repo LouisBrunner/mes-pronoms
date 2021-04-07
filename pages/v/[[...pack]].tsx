@@ -2,11 +2,11 @@ import {Layout} from 'components/Layout'
 import {PronounShortForm} from 'components/view/PronounShortForm'
 import {PronounsViewer} from 'components/view/PronounsViewer'
 import {baseURL} from 'config'
-import {usePackedPronouns} from 'hooks/usePackedPronouns'
+import {usePronounsFromQuery} from 'hooks/usePronounsFromQuery'
+import {useWatchPronouns} from 'hooks/useWatchPronouns'
 import {makeURL} from 'logic/helpers'
 import {NextPage} from 'next'
 import Link from 'next/link'
-import {useRouter} from 'next/router'
 import {ChangeEvent, useCallback, useEffect, useState} from 'react'
 
 type ViewPronounsProps = {
@@ -14,9 +14,9 @@ type ViewPronounsProps = {
 }
 
 const ViewPronouns: NextPage<ViewPronounsProps> = (): JSX.Element => {
-  const router = useRouter()
-  const {store, compressed: compress} = usePackedPronouns()
+  const {router, store, compressed: compress} = usePronounsFromQuery()
   const [tinyURL, setTinyURL] = useState(compress)
+  const [editURL, setEditURL] = useState(makeURL('e', store, {compress: tinyURL}))
 
   const onTinyURLChange = useCallback(async (e: ChangeEvent<HTMLInputElement>): Promise<void> => {
     const newValue = e.target.checked
@@ -26,8 +26,9 @@ const ViewPronouns: NextPage<ViewPronounsProps> = (): JSX.Element => {
 
   const doShare = useCallback(async () => {
     if (!navigator.share) {
-      // TODO: show notification?
+      // TODO: fallback mechanism
       console.error('could not share link')
+      return
     }
     await navigator.share({
       title: 'Mes Pronoms',
@@ -36,14 +37,23 @@ const ViewPronouns: NextPage<ViewPronounsProps> = (): JSX.Element => {
     })
   }, [tinyURL, store])
 
+  // catch the real value of compress once it's loaded
   useEffect(() => {
     setTinyURL(compress)
   }, [setTinyURL, compress])
 
+  useWatchPronouns({
+    store,
+    initial: true,
+    observer: useCallback(() => {
+      setEditURL(makeURL('e', store, {compress: tinyURL}))
+    }, [store, tinyURL, setEditURL]),
+  })
+
   return (
     <Layout>
       <PronounShortForm store={store} />
-      <Link href={makeURL('e', store, {compress: tinyURL})}>Editer</Link>
+      <Link href={editURL}>Editer</Link>
 
       <button onClick={doShare}>Partager</button>
       <>

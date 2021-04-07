@@ -1,13 +1,14 @@
 import {PronounStore} from 'logic/storage/store'
 import {IPronounStore} from 'logic/types'
-import {useEffect, useState} from 'react'
+import {useEffect, useRef} from 'react'
 
 export const usePronouns = (data: string | null): IPronounStore => {
-  const [store, setStore] = useState<IPronounStore>((): IPronounStore => {
-    return new PronounStore(null)
-  })
+  const store = useRef<IPronounStore>(new PronounStore())
   useEffect(() => {
-    setStore(new PronounStore(data))
-  }, [data, setStore])
-  return store
+    if (data === null) {
+      return
+    }
+    store.current.init(data)
+  }, [data])
+  return store.current
 }

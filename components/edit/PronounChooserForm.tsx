@@ -24,7 +24,7 @@ const Options = ((): Partial<Record<PronounKind, Option[]>> => {
 
 
 export const schema = yup.object().shape({
-  choice: yup.string()
+  choice: yup.mixed()
     .required()
     .notOneOf(['invalid'], 'Vous devez renseignez un pronom'),
   custom: yup.string()

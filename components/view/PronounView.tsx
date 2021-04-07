@@ -1,6 +1,7 @@
 import {choosePronoun, fetchGrammar} from 'logic/business'
 import {IPronounStore, PronounKind} from 'logic/types'
 import {PronounChoice} from 'components/view/PronounChoice'
+import {usePronoun} from 'hooks/usePronoun'
 
 interface PronounViewProps {
   store: IPronounStore,
@@ -8,9 +9,9 @@ interface PronounViewProps {
 }
 
 export const PronounView = ({store, pronoun}: PronounViewProps): JSX.Element => {
+  const picked = usePronoun(store, pronoun)
   const grammar = fetchGrammar(pronoun)
-  const pick = store.get(pronoun)
-  const choice = choosePronoun(pronoun, pick)
+  const choice = choosePronoun(pronoun, picked)
 
   return (
     <div>

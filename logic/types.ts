@@ -26,7 +26,7 @@ export type PronounPick = number | string
 export type PronounChangeEventDetails = {
   pronoun: PronounKind,
   choice: PronounPick | undefined,
-}
+} | Record<string, never>
 export type PronounChangeEvent = CustomEvent<PronounChangeEventDetails>
 
 export type ExportOptions = {
@@ -34,6 +34,8 @@ export type ExportOptions = {
 }
 
 export interface IPronounStore extends EventTarget {
+  init(data: string): void,
+
   get(pronoun: PronounKind): PronounPick | undefined,
   set(pronoun: PronounKind, choice: PronounPick | undefined): void,
 
