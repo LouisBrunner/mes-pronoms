@@ -6,6 +6,8 @@ import {useEffect, useRef} from 'react'
 import {Formik, FormikConfig, useFormikContext} from 'formik'
 import {IPronounContent} from 'logic/content/grammar'
 import {usePronoun} from 'hooks/usePronoun'
+import HelpIcon from '@material-ui/icons/HelpOutlineOutlined'
+import {Box, Card, CardContent, CardHeader, Tooltip} from '@material-ui/core'
 
 type NotifyParentProps = {
   onValid: (valid: boolean) => void,
@@ -78,15 +80,28 @@ export const PronounChooser = ({store, pronoun, onValid}: PronounChooserProps): 
 
   return (
     <Formik {...form}>
-      <div>
-        <h4>{grammar.title}</h4>
-        <p>{grammar.description}</p>
-        <PronounChooserForm pronoun={pronoun} />
-        <DisplayContent grammar={grammar} choice={choice} />
+      <>
+        <Card>
+          <CardHeader
+            action={
+              <Tooltip arrow title={grammar.description}>
+                <HelpIcon />
+              </Tooltip>
+            }
+            title={grammar.title}
+          />
+          <CardContent>
+            <PronounChooserForm pronoun={pronoun} />
+
+            <Box minHeight={180} marginTop={3}>
+              <DisplayContent grammar={grammar} choice={choice} />
+            </Box>
+          </CardContent>
+        </Card>
 
         <AutoSubmit />
         <NotifyParent onValid={onValid} />
-      </div>
+      </>
     </Formik>
   )
 }

@@ -7,6 +7,8 @@ import {makeURL} from 'logic/helpers'
 import {NextPage} from 'next'
 import Link from 'next/link'
 import {useCallback, useState} from 'react'
+import {Box, Container, IconButton, Tooltip} from '@material-ui/core'
+import SaveIcon from '@material-ui/icons/Save'
 
 type EditPronounsProps = {
   empty?: undefined,
@@ -29,11 +31,27 @@ const EditPronouns: NextPage<EditPronounsProps> = (): JSX.Element => {
   })
 
   return (
-    <Layout>
-      <PronounShortForm store={store} />
-      {isValid ? <Link href={viewURL}>Enregister/Partager</Link> : <span>Invalide</span>}
+    <Layout menu={
+      <>
+        <PronounShortForm store={store} />
 
-      <PronounsEditor store={store} onValid={setValid} />
+        <Box flexGrow={1} />
+
+        <Link href={viewURL} passHref>
+          <IconButton disabled={!isValid} color="inherit">
+            <Tooltip arrow title={isValid ? 'Enregister/Partager' : 'Invalide'}>
+              <SaveIcon />
+            </Tooltip>
+          </IconButton>
+        </Link>
+      </>
+    }>
+
+      <Box paddingTop={3} paddingBottom={3}>
+        <Container maxWidth="lg">
+          <PronounsEditor store={store} onValid={setValid} />
+        </Container>
+      </Box>
     </Layout>
   )
 }

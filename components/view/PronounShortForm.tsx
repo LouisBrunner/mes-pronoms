@@ -2,7 +2,7 @@ import {IPronounStore} from 'logic/types'
 import {useCallback, useState} from 'react'
 import {Copiable} from 'components/basic/Copiable'
 import {useWatchPronouns} from 'hooks/useWatchPronouns'
-import {Box, fade, Typography, Theme} from '@material-ui/core'
+import {Box, fade, Theme} from '@material-ui/core'
 import styled from 'styled-components'
 
 export type PronounShortFormProps = {
@@ -37,9 +37,7 @@ export const PronounShortForm = ({store}: PronounShortFormProps): JSX.Element | 
 
   return (
     <ShortFrom marginLeft={4} borderRadius={1} paddingX={1} paddingY={0.5}>
-      <Typography>
-        <Copiable>{shortForm}</Copiable>
-      </Typography>
+      <Copiable>{shortForm}</Copiable>
     </ShortFrom>
   )
 }
