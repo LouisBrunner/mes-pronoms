@@ -2,7 +2,7 @@ import {choosePronoun, ChosenPronoun, fetchGrammar} from 'logic/business'
 import {IPronounStore, PronounKind} from 'logic/types'
 import {PronounChoice} from 'components/view/PronounChoice'
 import {FormValues, PronounChooserForm, schema, transformFromForm, transformToForm} from 'components/edit/PronounChooserForm'
-import {useEffect} from 'react'
+import {useEffect, useRef} from 'react'
 import {Formik, FormikConfig, useFormikContext} from 'formik'
 import {IPronounContent} from 'logic/content/grammar'
 import {usePronoun} from 'hooks/usePronoun'
@@ -23,13 +23,21 @@ const NotifyParent = ({onValid}: NotifyParentProps): null => {
 }
 
 const AutoSubmit = (): null => {
+  const previous = useRef<Promise<void> | undefined>()
   const {values, submitForm} = useFormikContext<FormValues>()
 
   // Auto-submit on all changes
   useEffect(() => {
+    const trampoline = async (): Promise<void> => {
+      if (previous.current != undefined) {
+        await previous.current
+        previous.current = undefined
+      }
+      previous.current = submitForm()
+    }
     // eslint-disable-next-line  @typescript-eslint/no-floating-promises
-    submitForm()
-  }, [values, submitForm])
+    trampoline()
+  }, [previous, values, submitForm])
 
   return null
 }
