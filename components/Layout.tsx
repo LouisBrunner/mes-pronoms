@@ -9,13 +9,18 @@ import {ThemeProvider} from 'styled-components'
 export type LayoutProps = {
   menu?: ReactNode,
   children: ReactNode,
+  title?: string,
 }
 
-export const Layout = ({menu, children}: LayoutProps): JSX.Element => {
+export const Layout = ({title, menu, children}: LayoutProps): JSX.Element => {
+  let htmlTitle = ''
+  if (title) {
+    htmlTitle = ` - ${title}`
+  }
   return (
     <CssBaseline>
       <Head>
-        <title>Mes Pronoms</title>
+        <title>Mes Pronoms{htmlTitle}</title>
 
         <link rel="icon" href={`${pathPrefix}/favicon.ico`} />
         <link rel="apple-touch-icon" sizes="180x180" href={`${pathPrefix}/apple-touch-icon.png`} />

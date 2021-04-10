@@ -30,7 +30,7 @@ const ViewPronouns: NextPage<ViewPronounsProps> = (): JSX.Element => {
   })
 
   return (
-    <Layout menu={
+    <Layout title={store.shortForm()} menu={
       <>
         <PronounShortForm store={store} />
 
