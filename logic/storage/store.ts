@@ -66,7 +66,7 @@ export class PronounStore extends EventTarget implements IPronounStore {
     if (includes.find((pronoun) => {
       return this.#store.pronouns[pronoun] === undefined
     })) {
-      return 'N/A'
+      return undefined
     }
     return includes.map((pronoun) => {
       return choosePronoun(pronoun, this.#store.pronouns[pronoun]).word

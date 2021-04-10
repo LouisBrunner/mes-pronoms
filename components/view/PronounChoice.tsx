@@ -2,6 +2,7 @@ import {ChosenPronoun} from 'logic/business'
 import {IPronounContent} from 'logic/content/grammar'
 import {pluralize} from 'logic/utils'
 import {Speakable} from 'components/basic/Speakable'
+import {Typography} from '@material-ui/core'
 
 interface PronounChoiceProps {
   choice: ChosenPronoun,
@@ -17,12 +18,12 @@ export const PronounChoice = ({choice, grammar}: PronounChoiceProps): JSX.Elemen
 
   return (
     <>
-      <p>Il faut utiliser {pronouns}</p>
+      <Typography paragraph>Il faut utiliser {pronouns}</Typography>
       <div>
-        Examples:
+        <Typography>Examples:</Typography>
         <ul>
-          <li><em>Singulier</em>: {grammar.examples.singularWith(choice.word)}</li>
-          <li><em>Pluriel</em>: {grammar.examples.pluralWith(pluralChoice)}</li>
+          <li><Typography><em>Singulier</em>: {grammar.examples.singularWith(choice.word)}</Typography></li>
+          <li><Typography><em>Pluriel</em>: {grammar.examples.pluralWith(pluralChoice)}</Typography></li>
         </ul>
       </div>
     </>

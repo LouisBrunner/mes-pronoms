@@ -1,6 +1,7 @@
 import {AppProps} from 'next/app'
 import Document, {DocumentContext, DocumentInitialProps} from 'next/document'
 import {ServerStyleSheet} from 'styled-components'
+import {ServerStyleSheets} from '@material-ui/core/styles'
 
 // FIXME: find a better import?
 import type {AppType, ComponentsEnhancer, RenderPageResult} from 'next/dist/next-server/lib/utils'
@@ -8,6 +9,7 @@ import type {AppType, ComponentsEnhancer, RenderPageResult} from 'next/dist/next
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
     const sheet = new ServerStyleSheet()
+    const sheets = new ServerStyleSheets()
     const originalRenderPage = ctx.renderPage
 
     try {
@@ -16,7 +18,11 @@ export default class MyDocument extends Document {
           ...options,
           enhanceApp: (App: AppType): AppType => {
             return (props: AppProps): JSX.Element => {
-              return sheet.collectStyles(<App {...props} />)
+              return sheets.collect(
+                sheet.collectStyles(
+                  <App {...props} />
+                )
+              )
             }
           },
         })
@@ -28,6 +34,7 @@ export default class MyDocument extends Document {
         styles: (
           <>
             {initialProps.styles}
+            {sheets.getStyleElement()}
             {sheet.getStyleElement()}
           </>
         ),
