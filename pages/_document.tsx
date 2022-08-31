@@ -2,9 +2,7 @@ import {AppProps} from 'next/app'
 import Document, {DocumentContext, DocumentInitialProps} from 'next/document'
 import {ServerStyleSheet} from 'styled-components'
 import {ServerStyleSheets} from '@material-ui/core/styles'
-
-// FIXME: find a better import?
-import type {AppType, ComponentsEnhancer, RenderPageResult} from 'next/dist/next-server/lib/utils'
+import {AppType, ComponentsEnhancer, RenderPageResult} from 'next/dist/shared/lib/utils'
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps> {
