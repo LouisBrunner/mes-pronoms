@@ -1,9 +1,6 @@
-const { pathPrefix } = require('./config.js');
+const {pathPrefix} = require('./config.js');
 
 module.exports = {
-  future: {
-    webpack5: true,
-  },
   basePath: pathPrefix,
   // assetPrefix: pathPrefix,
   webpack(config, {webpack}) {
@@ -22,7 +19,7 @@ module.exports = {
         },
       }],
     })
-    config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//));
+    config.plugins.push(new webpack.IgnorePlugin({resourceRegExp: /\/__tests__\//}));
     return config
   },
 };

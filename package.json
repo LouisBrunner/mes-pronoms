@@ -32,7 +32,7 @@
     "@ungap/event-target": "^0.2.2",
     "formik": "^2.2.6",
     "lz-string": "^1.4.4",
-    "next": "11.1.0",
+    "next": "^12.2.5",
     "pako": "^1.0.11",
     "protobufjs": "^6.10.2",
     "react": "17.0.2",

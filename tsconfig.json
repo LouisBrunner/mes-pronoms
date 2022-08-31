@@ -2,7 +2,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "*": ["*"]
+      "*": [
+        "*"
+      ]
     },
     "target": "es2015",
     "lib": [
@@ -24,7 +26,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noImplicitAny": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true
   },
   "exclude": [
     "node_modules"
