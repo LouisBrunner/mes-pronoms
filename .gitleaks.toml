@@ -1,8 +1,0 @@
-[extend]
-useDefault = true
-
-[allowlists]
-targetRules = ["generic-api-key"]
-description = "Cloudflare Insights"
-keywords = ["data-cf-beacon"]
-paths = ['''index.html''']
