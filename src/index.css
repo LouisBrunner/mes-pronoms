@@ -1,0 +1,126 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/montserrat";
+
+@theme inline {
+	--font-heading: var(--font-sans);
+	--font-sans: "Montserrat Variable", sans-serif;
+	--color-sidebar-ring: var(--sidebar-ring);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-chart-5: var(--chart-5);
+	--color-chart-4: var(--chart-4);
+	--color-chart-3: var(--chart-3);
+	--color-chart-2: var(--chart-2);
+	--color-chart-1: var(--chart-1);
+	--color-ring: var(--ring);
+	--color-input: var(--input);
+	--color-border: var(--border);
+	--color-destructive: var(--destructive);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-accent: var(--accent);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-muted: var(--muted);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary: var(--secondary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary: var(--primary);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-popover: var(--popover);
+	--color-card-foreground: var(--card-foreground);
+	--color-card: var(--card);
+	--color-foreground: var(--foreground);
+	--color-background: var(--background);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) * 1.4);
+	--radius-2xl: calc(var(--radius) * 1.8);
+	--radius-3xl: calc(var(--radius) * 2.2);
+	--radius-4xl: calc(var(--radius) * 2.6);
+	--text-xs: calc(var(--text-base) * 0.6);
+	--text-sm: calc(var(--text-base) * 0.8);
+	--text-base: var(--text);
+	--text-lg: calc(var(--text-base) * 1.2);
+	--text-xl: calc(var(--text-base) * 1.4);
+	--text-2xl: calc(var(--text-base) * 1.6);
+	--text-3xl: calc(var(--text-base) * 1.8);
+	--text-4xl: calc(var(--text-base) * 2.2);
+	--text-5xl: calc(var(--text-base) * 2.6);
+	--text-6xl: calc(var(--text-base) * 3);
+	--text-7xl: calc(var(--text-base) * 3.2);
+	--text-8xl: calc(var(--text-base) * 3.6);
+	--text-9xl: calc(var(--text-base) * 4);
+}
+
+:root {
+	--radius: 0.7rem;
+	--text: 1.3rem;
+
+	--background: var(--coffee-bean);
+	--foreground: var(--porcelain);
+
+	--card: hsl(from var(--background) h s calc(l + 10) / alpha);
+	--card-foreground: var(--foreground);
+	--popover: var(--card);
+	--popover-foreground: var(--card-foreground);
+
+	--primary: var(--burnt-tangerine);
+	--primary-foreground: hsl(from var(--foreground) h s calc(l - 5) / alpha);
+
+	--secondary: var(--indigo-ink);
+	--secondary-foreground: hsl(from var(--foreground) h s calc(l - 5) / alpha);
+
+	--muted: hsl(from var(--background) h s calc(l - 10) / alpha);
+	--muted-foreground: hsl(from var(--foreground) h s l / calc(alpha - 0.2));
+
+	--accent: var(--brilliant-azure);
+	--accent-foreground: hsl(from var(--foreground) h s calc(l - 5) / alpha);
+
+	--destructive: hsl(from var(--burnt-tangerine) h s calc(l + 25) / alpha);
+	--border: hsl(from var(--slate-grey) h s calc(l - 20) / alpha);
+	--input: hsl(from var(--slate-grey) h s calc(l - 5) / alpha);
+	--ring: var(--indigo-ink);
+
+	--chart-1: hsl(from var(--chart-2) h s calc(l + 20) / alpha);
+	--chart-2: hsl(from var(--chart-3) h s calc(l + 20) / alpha);
+	--chart-3: hsl(from var(--chart-4) h s calc(l + 20) / alpha);
+	--chart-4: hsl(from var(--chart-5) h s calc(l + 20) / alpha);
+	--chart-5: hsl(from var(--indigo-ink) h s calc(l + 20) / alpha);
+
+	--sidebar: var(--card);
+	--sidebar-foreground: var(--card-foreground);
+	--sidebar-primary: var(--primary);
+	--sidebar-primary-foreground: var(--primary-foreground);
+	--sidebar-accent: var(--accent);
+	--sidebar-accent-foreground: var(--accent-foreground);
+	--sidebar-border: var(--border);
+	--sidebar-ring: var(--ring);
+
+	--porcelain: hsl(60 100 99);
+	--slate-grey: hsl(207 13 54);
+	--indigo-ink: hsl(263 66 27);
+	--brilliant-azure: hsl(211 71 53);
+	--burnt-tangerine: hsl(8 67 52);
+	--coffee-bean: hsl(278 52 4);
+}
+
+@layer base {
+	button:not(:disabled),
+	[role="button"]:not(:disabled) {
+		cursor: pointer;
+	}
+	button:disabled,
+	[role="button"]:disabled {
+		cursor: not-allowed;
+	}
+	html {
+		@apply font-sans bg-background text-foreground text-base;
+	}
+}

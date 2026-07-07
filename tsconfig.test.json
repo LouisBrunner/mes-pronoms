@@ -1,0 +1,8 @@
+{
+	"compilerOptions": {
+		"types": ["bun", "vite/client"]
+	},
+	"exclude": ["node_modules"],
+	"extends": "./tsconfig.json",
+	"include": ["**/*.test.ts", "**/*.test.tsx"]
+}

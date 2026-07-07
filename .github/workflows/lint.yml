@@ -1,0 +1,26 @@
+name: Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  lint:
+    uses: LouisBrunner/.github/.github/workflows/lint-all.yml@main
+    permissions:
+      actions: read
+      contents: read
+      statuses: write
+      pull-requests: write
+
+  vet:
+    uses: LouisBrunner/.github/.github/workflows/lint-bun.yml@main
+    permissions:
+      contents: read
