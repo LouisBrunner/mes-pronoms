@@ -1,5 +1,5 @@
-import { copyFileSync } from "bun:fs";
-import { join } from "bun:path";
+import { copyFileSync } from "node:fs";
+import { join } from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
