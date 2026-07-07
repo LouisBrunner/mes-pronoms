@@ -40,7 +40,7 @@
 	"engines": {
 		"bun": ">=1.0.0"
 	},
-	"homepage": "https://louisbrunner.github.io/mes-pronoms/",
+	"homepage": "https://mes-pronoms.lbrunner.net/",
 	"license": "MIT",
 	"name": "mes-pronoms",
 	"private": true,

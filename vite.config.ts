@@ -1,10 +1,26 @@
+import { copyFileSync } from "bun:fs";
+import { join } from "bun:path";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
+
+const copy404Plugin = (): Plugin => {
+	let outDir = "dist";
+	return {
+		apply: "build",
+		closeBundle() {
+			copyFileSync(join(outDir, "index.html"), join(outDir, "404.html"));
+		},
+		configResolved(config) {
+			outDir = config.build.outDir;
+		},
+		name: "copy-index-to-404",
+	};
+};
 
 export default defineConfig(() => {
 	return {
-		plugins: [react(), tailwindcss(), tsconfigPaths()],
+		plugins: [react(), tailwindcss(), tsconfigPaths(), copy404Plugin()],
 	};
 });
