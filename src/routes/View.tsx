@@ -1,14 +1,15 @@
 import { Pencil } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Link } from "react-router";
-import { SimpleTooltip } from "@/components/common/SimpleTooltip";
-import { PronounView } from "@/components/pronouns/PronounView";
-import { PronounsLayout } from "@/components/pronouns/PronousLayout";
-import { buttonVariants } from "@/components/ui/button";
-import { usePronounsFromQuery } from "@/hooks/usePronounsFromQuery";
-import { useShare } from "@/hooks/useShare";
-import { useWatchPronouns } from "@/hooks/useWatchPronouns";
-import { makeURL } from "@/logic/helpers";
+import { SimpleTooltip } from "@/components/common/SimpleTooltip.tsx";
+import { PronounsLayout } from "@/components/pronouns/PronounsLayout.tsx";
+import { PronounView } from "@/components/pronouns/PronounView.tsx";
+import { buttonVariants } from "@/components/ui/button.tsx";
+import { useAllPronouns } from "@/hooks/useAllPronouns.ts";
+import { usePronounsFromQuery } from "@/hooks/usePronounsFromQuery.ts";
+import { useShare } from "@/hooks/useShare.tsx";
+import { useWatchPronouns } from "@/hooks/useWatchPronouns.ts";
+import { makeURL } from "@/logic/utils.ts";
 
 export const View = () => {
 	const { navigate, store, compressed: compress } = usePronounsFromQuery();
@@ -20,6 +21,7 @@ export const View = () => {
 	const [editURL, setEditURL] = useState(
 		makeURL("e", store, { compress: tinyURL }),
 	);
+	const selections = useAllPronouns(store);
 
 	useWatchPronouns({
 		initial: true,
@@ -47,7 +49,12 @@ export const View = () => {
 	return (
 		<PronounsLayout menuItems={menuItems} store={store}>
 			{(pronoun) => (
-				<PronounView key={pronoun} pronoun={pronoun} store={store} />
+				<PronounView
+					key={pronoun}
+					pronoun={pronoun}
+					selections={selections}
+					store={store}
+				/>
 			)}
 		</PronounsLayout>
 	);

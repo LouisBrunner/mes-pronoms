@@ -1,33 +1,38 @@
 import { Volume2 } from "lucide-react";
-import type { ReactNode } from "react";
-import { TooltipButton } from "@/components/common/TooltipButton";
-import { useSpeechSynthesis } from "@/hooks/useSpeechSynthesis";
+import { type ReactNode, useCallback } from "react";
+import { TooltipButton } from "@/components/common/TooltipButton.tsx";
+import { useSpeak } from "@/hooks/useSpeak.ts";
+import { cn } from "@/logic/utils.ts";
 
 export interface SpeakableProps {
 	children: ReactNode;
-	ipa: string;
-	word: string;
+	className?: string;
+	ipa: string | string[] | undefined;
+	word: string | string[];
 }
 
-export const Speakable = ({ ipa, word, children }: SpeakableProps) => {
-	const speech = useSpeechSynthesis({ ipa, word });
+export const Speakable = ({
+	className,
+	ipa,
+	word,
+	children,
+}: SpeakableProps) => {
+	const speak = useSpeak();
+	const onClick = useCallback(() => speak?.({ ipa, word }), [speak, ipa, word]);
 
-	if (!speech.enabled) {
+	if (!speak) {
 		return <>{children}</>;
 	}
 
 	return (
-		<span className="inline-flex items-center gap-1">
+		<TooltipButton
+			className={cn("inline-flex items-center gap-1.5 p-1 -ml-1", className)}
+			onClick={onClick}
+			tooltip="Écouter"
+			variant="ghost"
+		>
 			{children}
-			<TooltipButton
-				className="size-4"
-				onClick={speech.speak}
-				size="icon"
-				tooltip="Écouter"
-				variant="ghost"
-			>
-				<Volume2 className="size-4" />
-			</TooltipButton>
-		</span>
+			<Volume2 className="size-4" />
+		</TooltipButton>
 	);
 };

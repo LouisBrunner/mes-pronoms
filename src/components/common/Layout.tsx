@@ -15,7 +15,7 @@ export const Layout = ({ title, menu, children }: LayoutProps) => {
 	return (
 		<>
 			<header className="sticky top-0 z-40 bg-primary text-primary-foreground shadow-md">
-				<div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-2 h-14">
+				<div className="max-w-5xl mx-auto px-4 py-3 flex items-center gap-4 h-14">
 					<Link className="font-semibold" to="/">
 						<span className="hidden sm:inline">Mes Pronoms</span>
 						<span className="inline sm:hidden">iel</span>

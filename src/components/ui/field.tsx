@@ -1,8 +1,8 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { useMemo } from "react";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { cn } from "@/logic/utils";
+import { Label } from "@/components/ui/label.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
+import { cn } from "@/logic/utils.ts";
 
 function FieldSet({ className, ...props }: React.ComponentProps<"fieldset">) {
 	return (
@@ -101,7 +101,7 @@ function FieldLabel({
 	return (
 		<Label
 			className={cn(
-				"group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:bg-primary/5 has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border *:data-[slot=field]:p-2 dark:has-data-checked:bg-primary/10",
+				"group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50 has-data-checked:bg-primary/10 has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border *:data-[slot=field]:p-2",
 				"has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col",
 				className,
 			)}
@@ -152,19 +152,19 @@ function FieldSeparator({
 				"relative -my-2 h-5 text-xs/relaxed group-data-[variant=outline]/field-group:-mb-2",
 				className,
 			)}
-			data-content={!!children}
+			data-content={Boolean(children)}
 			data-slot="field-separator"
 			{...props}
 		>
 			<Separator className="absolute inset-0 top-1/2" />
-			{children && (
+			{children ? (
 				<span
 					className="relative mx-auto block w-fit bg-background px-2 text-muted-foreground"
 					data-slot="field-separator-content"
 				>
 					{children}
 				</span>
-			)}
+			) : null}
 		</div>
 	);
 }
@@ -182,7 +182,7 @@ function FieldError({
 			return children;
 		}
 
-		if (!errors?.length) {
+		if (errors === undefined || errors.length === 0) {
 			return null;
 		}
 
@@ -190,7 +190,7 @@ function FieldError({
 			...new Map(errors.map((error) => [error?.message, error])).values(),
 		];
 
-		if (uniqueErrors?.length === 1) {
+		if (uniqueErrors.length === 1) {
 			return uniqueErrors[0]?.message;
 		}
 

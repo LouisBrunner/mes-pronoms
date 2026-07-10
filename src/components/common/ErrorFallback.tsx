@@ -1,9 +1,9 @@
 import { CircleX, Home, RotateCcw } from "lucide-react";
 import { type FallbackProps, getErrorMessage } from "react-error-boundary";
 import { Link } from "react-router";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Button, buttonVariants } from "../ui/button";
-import { Layout } from "./Layout";
+import { Layout } from "@/components/common/Layout.tsx";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
+import { Button, buttonVariants } from "@/components/ui/button.tsx";
 
 export const ErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => (
 	<Layout>

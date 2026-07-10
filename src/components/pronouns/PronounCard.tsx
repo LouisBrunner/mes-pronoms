@@ -1,22 +1,25 @@
 import { HelpCircle } from "lucide-react";
 import type { ReactNode } from "react";
-import { SimpleTooltip } from "@/components/common/SimpleTooltip";
+import { SimpleTooltip } from "@/components/common/SimpleTooltip.tsx";
+import { Speakable } from "@/components/common/Speakable.tsx";
 import {
 	Card,
 	CardAction,
 	CardContent,
 	CardHeader,
 	CardTitle,
-} from "@/components/ui/card";
-import { type ChosenPronoun, fetchGrammar } from "@/logic/business";
-import type { IPronounContent } from "@/logic/content/grammar";
-import type { PronounKind } from "@/logic/types";
-import { pluralize } from "@/logic/utils";
-import { Speakable } from "../common/Speakable";
+} from "@/components/ui/card.tsx";
+import { type ChosenPronoun, fetchGrammar } from "@/logic/business.ts";
+import { Examples } from "@/logic/grammar/examples.tsx";
+import { getForms } from "@/logic/grammar/helpers.ts";
+import type { PronounKind } from "@/logic/pronouns/index.ts";
+import type { PronounSelections } from "@/logic/storage/store.ts";
+import { cn } from "@/logic/utils.ts";
 
 export type PronounCardProps = {
 	pronoun: PronounKind;
 	choice: ChosenPronoun | undefined;
+	selections: PronounSelections;
 	children?: ReactNode;
 	showMissing?: boolean;
 };
@@ -24,13 +27,16 @@ export type PronounCardProps = {
 export const PronounCard = ({
 	pronoun,
 	choice,
+	selections,
 	children,
 	showMissing,
 }: PronounCardProps) => {
 	const grammar = fetchGrammar(pronoun);
 
 	return (
-		<Card>
+		<Card
+			className={cn(pronoun === "FamilleModificateur" ? "md:col-span-2" : "")}
+		>
 			<CardHeader>
 				<CardTitle>{grammar.title}</CardTitle>
 				<CardAction>
@@ -49,7 +55,11 @@ export const PronounCard = ({
 						</p>
 					) : null
 				) : (
-					<PronounChoice choice={choice} examples={grammar.examples} />
+					<PronounChoice
+						choice={choice}
+						pronoun={pronoun}
+						selections={selections}
+					/>
 				)}
 			</CardContent>
 		</Card>
@@ -57,38 +67,29 @@ export const PronounCard = ({
 };
 
 type PronounChoiceProps = {
+	pronoun: PronounKind;
 	choice: ChosenPronoun;
-	examples: IPronounContent["examples"];
+	selections: PronounSelections;
 };
 
-const PronounChoice = ({ choice, examples }: PronounChoiceProps) => {
-	const pluralChoice = pluralize(choice.word);
+const PronounChoice = ({ pronoun, choice, selections }: PronounChoiceProps) => {
+	const [singular, plural] = getForms(pronoun, choice.word);
+	const content = (
+		<strong>
+			{singular} / {plural}
+		</strong>
+	);
 	return (
 		<>
 			<p className="mb-4">
 				Il faut utiliser{" "}
-				{choice.ipa ? (
-					<Speakable ipa={choice.ipa} word={choice.word}>
-						<strong>
-							{choice.word}/{pluralChoice}
-						</strong>
-					</Speakable>
-				) : (
-					<strong>
-						{choice.word}/{pluralChoice}
-					</strong>
-				)}
+				<Speakable ipa={choice.ipa} word={choice.word}>
+					{content}
+				</Speakable>
 			</p>
 			<section>
 				<p>Exemples:</p>
-				<ul className="list-inside list-disc ps-2">
-					<li>
-						<em>Singulier</em>: {examples.singularWith(choice.word)}
-					</li>
-					<li>
-						<em>Pluriel</em>: {examples.pluralWith(pluralChoice)}
-					</li>
-				</ul>
+				<Examples kind={pronoun} selections={selections} word={choice.word} />
 			</section>
 		</>
 	);

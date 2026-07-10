@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
 name: Build & Deploy
 
 on:
@@ -20,38 +21,11 @@ jobs:
       run: |
         bun run test:ci
 
-  build:
-    name: Build
-    runs-on: ubuntu-24.04
+  build-deploy:
+    name: Build & Deploy
     needs: [test]
     permissions:
       contents: read
       pages: write
       id-token: write
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
-        with:
-          persist-credentials: false
-
-      - name: Set up Bun
-        uses: LouisBrunner/.github/.github/actions/setup-bun@main
-
-      - name: Build
-        run: |
-          bun install
-          bun run build
-
-      - name: Upload Pages artifact
-        uses: LouisBrunner/.github/.github/actions/upload-pages@main
-        with:
-          path: dist
-
-  deploy:
-    name: Deploy
-    needs: [build]
-    if: github.ref_name == 'main'
-    permissions:
-      pages: write
-      id-token: write
-    uses: LouisBrunner/.github/.github/workflows/deploy-pages.yml@main
+    uses: LouisBrunner/.github/.github/workflows/build-bun-pages.yml@main

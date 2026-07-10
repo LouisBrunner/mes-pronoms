@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
-import { useWatchPronouns } from "@/hooks/useWatchPronouns";
+import { useWatchPronouns } from "@/hooks/useWatchPronouns.ts";
+import type { PronounKind } from "@/logic/pronouns/index.ts";
 import type {
 	IPronounStore,
 	PronounChangeEvent,
-	PronounKind,
-	PronounPick,
-} from "@/logic/types";
+} from "@/logic/storage/store.ts";
+import type { PronounPick } from "@/logic/storage/types.ts";
 
 export const usePronoun = (
 	store: IPronounStore,

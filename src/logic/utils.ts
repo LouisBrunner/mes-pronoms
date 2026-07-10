@@ -1,22 +1,17 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type { IPronounStore } from "@/logic/storage/store.ts";
+import type { ExportOptions } from "@/logic/storage/types.ts";
 
-export const capitalize = (s: string): string => {
-	return s.charAt(0).toUpperCase() + s.slice(1);
-};
+export const makeURL = (
+	action: "v" | "e",
+	store: IPronounStore,
+	options: ExportOptions,
+): string => `/${action}/${store.export(options)}`;
 
-export const pluralize = (word: string): string => {
-	return `${word}s`;
-};
+export const capitalize = (s: string): string =>
+	s.charAt(0).toUpperCase() + s.slice(1);
 
-export const isArray = <T>(thing: T | T[]): thing is T[] => {
-	return (thing as T[])?.length !== undefined;
-};
+export const identity = <T>(s: T): T => s;
 
-export const identity = <T>(s: T): T => {
-	return s;
-};
-
-export const cn = (...inputs: ClassValue[]): string => {
-	return twMerge(clsx(inputs));
-};
+export const cn = (...inputs: ClassValue[]): string => twMerge(clsx(inputs));

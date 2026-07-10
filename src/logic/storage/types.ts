@@ -1,4 +1,6 @@
-import type { PronounKind, PronounPick } from "@/logic/types";
+import type { PronounKind } from "@/logic/pronouns/index.ts";
+
+export type PronounPick = number | string;
 
 export type PronounsStorage = {
 	pronouns: {
@@ -6,12 +8,8 @@ export type PronounsStorage = {
 	};
 };
 
-export const emptyStorage = (): PronounsStorage => {
-	return { pronouns: {} };
-};
+export const emptyStorage = (): PronounsStorage => ({ pronouns: {} });
 
-export const isStorage = (
-	data: PronounsStorage | string,
-): data is PronounsStorage => {
-	return (data as PronounsStorage)?.pronouns !== undefined;
+export type ExportOptions = {
+	compress: boolean;
 };

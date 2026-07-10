@@ -1,9 +1,10 @@
+/** biome-ignore-all lint/correctness/noNodejsModules: we are in "node" */
+/** biome-ignore-all lint/style/noDefaultExport: that's how vite works */
 import { copyFileSync } from "node:fs";
 import { join } from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 const copy404Plugin = (): Plugin => {
 	let outDir = "dist";
@@ -19,8 +20,9 @@ const copy404Plugin = (): Plugin => {
 	};
 };
 
-export default defineConfig(() => {
-	return {
-		plugins: [react(), tailwindcss(), tsconfigPaths(), copy404Plugin()],
-	};
-});
+export default defineConfig(() => ({
+	plugins: [react(), tailwindcss(), copy404Plugin()],
+	resolve: {
+		tsconfigPaths: true,
+	},
+}));

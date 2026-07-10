@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.5.0/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.5.3/schema.json",
 	"assist": {
 		"actions": {
 			"source": {
@@ -23,15 +23,56 @@
 		"indentStyle": "tab"
 	},
 	"linter": {
+		"domains": {
+			"drizzle": "none",
+			"next": "none",
+			"playwright": "none",
+			"qwik": "none",
+			"reactNative": "none",
+			"solid": "none",
+			"svelte": "none",
+			"turborepo": "none",
+			"vue": "none"
+		},
 		"enabled": true,
 		"rules": {
+			"complexity": {
+				"noExcessiveLinesPerFunction": "off"
+			},
 			"correctness": {
 				"noUnusedImports": {
 					"fix": "safe",
 					"level": "warn"
 				}
 			},
-			"preset": "recommended"
+			"preset": "all",
+			"security": {
+				"noSecrets": {
+					"level": "on",
+					"options": {
+						"entropyThreshold": 50
+					}
+				}
+			},
+			"style": {
+				"noContinue": "off",
+				"noExcessiveLinesPerFile": "off",
+				"noImplicitBoolean": "off",
+				"noJsxLiterals": "off",
+				"noMagicNumbers": "off", // FIXME: too strict
+				"noNestedTernary": "off",
+				"noTernary": "off",
+				"useConsistentTypeDefinitions": "off", // FIXME: would be nice
+				"useDefaultSwitchClause": "off",
+				"useDestructuring": "off",
+				"useExportsLast": "off",
+				"useNamingConvention": {
+					"level": "on",
+					"options": {
+						"strictCase": false
+					}
+				}
+			}
 		}
 	},
 	"vcs": {

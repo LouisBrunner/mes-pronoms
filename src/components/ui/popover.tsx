@@ -3,7 +3,7 @@
 import { Popover as PopoverPrimitive } from "radix-ui";
 import type * as React from "react";
 
-import { cn } from "@/logic/utils";
+import { cn } from "@/logic/utils.ts";
 
 function Popover({
 	...props

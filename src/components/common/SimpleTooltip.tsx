@@ -3,7 +3,7 @@ import {
 	Tooltip,
 	TooltipContent,
 	TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip.tsx";
 
 export type SimpleTooltipProps = {
 	tooltip: string;
@@ -15,11 +15,9 @@ export const SimpleTooltip = ({
 	tooltip,
 	side,
 	children,
-}: SimpleTooltipProps) => {
-	return (
-		<Tooltip>
-			<TooltipTrigger asChild>{children}</TooltipTrigger>
-			<TooltipContent side={side}>{tooltip}</TooltipContent>
-		</Tooltip>
-	);
-};
+}: SimpleTooltipProps) => (
+	<Tooltip>
+		<TooltipTrigger asChild>{children}</TooltipTrigger>
+		<TooltipContent side={side}>{tooltip}</TooltipContent>
+	</Tooltip>
+);

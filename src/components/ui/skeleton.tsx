@@ -1,4 +1,4 @@
-import { cn } from "@/logic/utils";
+import { cn } from "@/logic/utils.ts";
 
 function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
 	return (

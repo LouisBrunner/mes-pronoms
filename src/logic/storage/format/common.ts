@@ -1,6 +1,6 @@
-import { parseChoice } from "@/logic/business";
-import { emptyStorage, type PronounsStorage } from "@/logic/storage/types";
-import { PronounList } from "@/logic/types";
+import { parseChoice } from "@/logic/business.ts";
+import { PronounList } from "@/logic/pronouns/index.ts";
+import { emptyStorage, type PronounsStorage } from "@/logic/storage/types.ts";
 
 const PRONOUN_DELIM = ",";
 
@@ -8,7 +8,7 @@ export const serialize = (
 	store: PronounsStorage,
 	escapeString: (s: string) => string,
 ): string => {
-	const list = [];
+	const list: string[] = [];
 	for (const p of PronounList) {
 		let choice: string;
 		const pick = store.pronouns[p];
@@ -36,10 +36,13 @@ export const deserialize = (
 	}
 
 	const store = emptyStorage();
-	for (let i = 0; i < parts.length; ++i) {
+	for (let i = 0; i < parts.length; i += 1) {
 		const pronoun = PronounList[i];
+		if (pronoun === undefined) {
+			continue;
+		}
 		const rawPick = parts[i];
-		if (rawPick === "") {
+		if (rawPick === "" || rawPick === undefined) {
 			continue;
 		}
 		let choice = parseChoice(pronoun, rawPick);

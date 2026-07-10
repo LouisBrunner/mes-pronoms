@@ -1,7 +1,10 @@
 import { useEffect } from "react";
-import type { IPronounStore, PronounChangeEvent } from "@/logic/types";
+import type {
+	IPronounStore,
+	PronounChangeEvent,
+} from "@/logic/storage/store.ts";
 
-export type useWatchPronounsProps = {
+export type WatchPronounsProps = {
 	store: IPronounStore;
 	initial?: true | (() => void);
 	observer: (e: PronounChangeEvent | null) => void;
@@ -11,8 +14,7 @@ export const useWatchPronouns = ({
 	store,
 	initial,
 	observer,
-}: useWatchPronounsProps): void => {
-	// biome-ignore lint/correctness/useExhaustiveDependencies: initial is intentionally excluded to only run once
+}: WatchPronounsProps): void => {
 	useEffect(() => {
 		if (!initial) {
 			return;

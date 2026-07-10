@@ -8,27 +8,27 @@ import {
 	useState,
 } from "react";
 import type { NavigateFunction } from "react-router";
-import { Copiable } from "@/components/common/Copiable";
-import { TooltipButton } from "@/components/common/TooltipButton";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Copiable } from "@/components/common/Copiable.tsx";
+import { TooltipButton } from "@/components/common/TooltipButton.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { Field, FieldLabel } from "@/components/ui/field.tsx";
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
-} from "@/components/ui/popover";
-import { baseURL } from "@/config";
-import { makeURL } from "@/logic/helpers";
-import type { IPronounStore } from "@/logic/types";
+} from "@/components/ui/popover.tsx";
+import { baseURL } from "@/config.ts";
+import type { IPronounStore } from "@/logic/storage/store.ts";
+import { makeURL } from "@/logic/utils.ts";
 
-export type useShareProps = {
+export type ShareProps = {
 	navigate: NavigateFunction;
 	store: IPronounStore;
 	tinyURL: boolean;
 };
 
-export type useShareState = {
+export type ShareState = {
 	shareButton: ReactNode;
 	tinyURL: boolean;
 };
@@ -37,7 +37,7 @@ export const useShare = ({
 	navigate,
 	store,
 	tinyURL: initialTinyURL,
-}: useShareProps): useShareState => {
+}: ShareProps): ShareState => {
 	const [tinyURL, setTinyURL] = useState(initialTinyURL);
 	const id = useId();
 
@@ -48,7 +48,7 @@ export const useShare = ({
 
 	const doShare = useCallback(async () => {
 		await navigator.share({
-			text: "Utilise cette référence quand tu dois utiliser des pronoms pour me désigner",
+			text: "Utilisez cette référence quand vous devez utiliser des pronoms pour me désigner",
 			title: "Mes Pronoms",
 			url: baseURL + makeURL("v", store, { compress: tinyURL }),
 		});

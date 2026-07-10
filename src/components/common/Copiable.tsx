@@ -1,8 +1,8 @@
 import { Copy } from "lucide-react";
 import { useCallback } from "react";
 import { toast } from "sonner";
-import { TooltipButton } from "@/components/common/TooltipButton";
-import { cn } from "@/logic/utils";
+import { TooltipButton } from "@/components/common/TooltipButton.tsx";
+import { cn } from "@/logic/utils.ts";
 
 export interface CopiableProps {
 	children: string;
@@ -13,9 +13,9 @@ export const Copiable = ({ className, children }: CopiableProps) => {
 	const toClipboard = useCallback(async () => {
 		try {
 			await navigator.clipboard.writeText(children);
-			toast.success(`Copié dans le presse-papier`);
+			toast.success("Copié dans le presse-papier");
 		} catch (err) {
-			toast.error(`Erreur lors de la copie dans le presse-papier`, {
+			toast.error("Erreur lors de la copie dans le presse-papier", {
 				description: `${err}`,
 			});
 		}

@@ -1,10 +1,10 @@
-import { TABLE } from "@/logic/content/choices";
-import { GRAMMAR, type IPronounContent } from "@/logic/content/grammar";
-import type { PronounKind, PronounPick } from "@/logic/types";
+import { GRAMMAR, type IPronounContent } from "@/logic/grammar/index.ts";
+import { PRONOUNS, type PronounKind } from "@/logic/pronouns/index.ts";
+import type { PronounPick } from "@/logic/storage/types.ts";
 
 export interface ChosenPronoun {
-	readonly ipa?: string;
-	readonly word: string;
+	readonly ipa?: string | string[];
+	readonly word: string | string[];
 }
 
 export const choosePronoun = (
@@ -12,27 +12,26 @@ export const choosePronoun = (
 	picked: PronounPick | undefined,
 ): ChosenPronoun | undefined => {
 	if (picked === undefined) {
-		return undefined;
+		return;
 	}
 	if (typeof picked === "string") {
 		return { word: picked };
 	}
-	return TABLE.pronouns[pronoun].lookup[picked];
+	return PRONOUNS[pronoun].lookup[picked];
 };
 
-export const fetchGrammar = (pronoun: PronounKind): IPronounContent => {
-	return GRAMMAR.pronouns[pronoun];
-};
+export const fetchGrammar = (pronoun: PronounKind): IPronounContent =>
+	GRAMMAR[pronoun];
 
 export const parseChoice = (
 	pronoun: PronounKind,
 	s: string,
 ): string | number => {
-	const n = parseInt(s, 10);
+	const n = Number.parseInt(s, 10);
 	if (Number.isNaN(n)) {
-		return unescape(s);
+		return decodeURIComponent(s);
 	}
-	const choice = TABLE.pronouns[pronoun].lookup;
+	const choice = PRONOUNS[pronoun].lookup;
 	if (choice[n] === undefined) {
 		throw new Error(`invalid choice '${n}' for ${pronoun}`);
 	}
@@ -43,7 +42,7 @@ export const ensureChoice = (
 	pronoun: PronounKind,
 	s: string,
 ): string | number => {
-	for (const entry of TABLE.pronouns[pronoun].db) {
+	for (const entry of PRONOUNS[pronoun].db) {
 		if (entry.word === s) {
 			return entry.id;
 		}

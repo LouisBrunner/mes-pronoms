@@ -1,21 +1,43 @@
-import { isDev } from "@/config";
-import { choosePronoun, ensureChoice } from "@/logic/business";
-import { benchmarkFormats } from "@/logic/storage/format";
-import { packStore, unpackStore } from "@/logic/storage/packing";
-import { emptyStorage, type PronounsStorage } from "@/logic/storage/types";
-import type {
-	ExportOptions,
-	IPronounStore,
-	PronounChangeEventDetails,
-	PronounKind,
-	PronounPick,
-} from "@/logic/types";
+/** biome-ignore-all lint/style/useGlobalThis: I need it */
+import { toast } from "sonner";
+import { isDev } from "@/config.ts";
+import { choosePronoun, ensureChoice } from "@/logic/business.ts";
+import type { PronounKind } from "@/logic/pronouns/index.ts";
+import { benchmarkFormats } from "@/logic/storage/format/index.ts";
+import { packStore, unpackStore } from "@/logic/storage/packing.ts";
+import {
+	type ExportOptions,
+	emptyStorage,
+	type PronounPick,
+	type PronounsStorage,
+} from "@/logic/storage/types.ts";
 
 declare global {
 	interface Window {
 		benchmarkFormats?: (store?: PronounsStorage) => Record<string, string>;
 		store?: IPronounStore;
 	}
+}
+
+export type PronounChangeEventDetails =
+	| {
+			pronoun: PronounKind;
+			choice: PronounPick | undefined;
+	  }
+	| Record<string, never>;
+export type PronounChangeEvent = CustomEvent<PronounChangeEventDetails>;
+
+export type PronounSelections = Partial<Record<PronounKind, PronounPick>>;
+
+export interface IPronounStore extends EventTarget {
+	export: ({ compress }: ExportOptions) => string;
+
+	get: (pronoun: PronounKind) => PronounPick | undefined;
+	getAll: () => PronounSelections;
+	init: (data: string) => void;
+	set: (pronoun: PronounKind, choice: PronounPick | undefined) => void;
+
+	shortForm: () => string | undefined;
 }
 
 export class PronounStore extends EventTarget implements IPronounStore {
@@ -33,7 +55,7 @@ export class PronounStore extends EventTarget implements IPronounStore {
 			this.#store = unpackStore(data);
 		} catch (e) {
 			const err = e as Error;
-			console.error(`failed to parse: ${err.message}`);
+			toast.error(`Impossible de lire les pronoms : ${err.message}`);
 			this.#store = emptyStorage();
 		}
 		this.#cachedExport = {};
@@ -45,14 +67,16 @@ export class PronounStore extends EventTarget implements IPronounStore {
 			window.store = this;
 			window.benchmarkFormats = (
 				store: PronounsStorage = this.#store,
-			): Record<string, string> => {
-				return benchmarkFormats(store);
-			};
+			): Record<string, string> => benchmarkFormats(store);
 		}
 	}
 
 	get(pronoun: PronounKind): PronounPick | undefined {
 		return this.#store.pronouns[pronoun];
+	}
+
+	getAll(): PronounSelections {
+		return { ...this.#store.pronouns };
 	}
 
 	set(pronoun: PronounKind, choiceRaw: PronounPick | undefined): void {
@@ -74,24 +98,28 @@ export class PronounStore extends EventTarget implements IPronounStore {
 	}
 
 	shortForm(): string | undefined {
-		const includes: PronounKind[] = ["PronomSujet"];
-		if (
-			includes.find((pronoun) => {
-				return this.#store.pronouns[pronoun] === undefined;
-			})
-		) {
-			return undefined;
+		const includes: PronounKind[] = [
+			"PronomSujet",
+			"PronomObjet",
+			"DeterminantPossessif",
+			"PronomPossessif",
+		];
+		const words = includes
+			.map(
+				(pronoun) =>
+					choosePronoun(pronoun, this.#store.pronouns[pronoun])?.word,
+			)
+			.filter((word): word is string => word !== undefined)
+			.filter((word, i, all) => i === 0 || word !== all[i - 1]);
+		if (words.length === 0) {
+			return;
 		}
-		return includes
-			.map((pronoun) => {
-				return choosePronoun(pronoun, this.#store.pronouns[pronoun])?.word;
-			})
-			.join("/");
+		return words.join("/");
 	}
 
 	export(options: ExportOptions): string {
 		const cacheKey = options.compress ? "compressed" : "non-compress";
-		if (this.#cachedExport?.[cacheKey] !== undefined) {
+		if (this.#cachedExport[cacheKey] !== undefined) {
 			return this.#cachedExport[cacheKey];
 		}
 		this.#cachedExport[cacheKey] = packStore(this.#store, options);

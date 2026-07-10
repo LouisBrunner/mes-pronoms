@@ -1,0 +1,37 @@
+/** biome-ignore-all lint/style/useNamingConvention: I want it */
+import type { PronounsStorage } from "@/logic/storage/types.ts";
+
+export const ELLE: PronounsStorage = {
+	pronouns: {
+		AccordsAdjectifs: 3,
+		AccordsParticipeGroupe3: 3,
+		AccordsParticipeGroupe12: 3,
+		ArticleDefini: 5,
+		ArticleIndefini: 4,
+		ArticlePartitif: 5,
+		DeterminantDemonstratif: 4,
+		DeterminantPossessif: 3,
+		DeterminantPossessifJe: 4,
+		DeterminantPossessifTu: 4,
+		FamilleAmi: 3,
+		FamilleBelleFamille: 1,
+		FamilleCousin: 3,
+		FamilleEnfant: 3,
+		FamilleFratrie: 3,
+		FamilleModificateur: 3,
+		FamilleNeveu: 3,
+		FamilleOncle: 2,
+		FamilleParent: 3,
+		FamilleParrain: 3,
+		FamillePartenaire: 3,
+		PronomDemonstratif: 3,
+		PronomObjet: 3,
+		PronomPossessif: 3,
+		PronomPossessifJe: 3,
+		PronomPossessifTu: 3,
+		PronomSujet: 3,
+		TitreAdmin: 2,
+		TitreProfession: 4,
+		Tout: 2,
+	},
+};

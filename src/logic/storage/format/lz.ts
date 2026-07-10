@@ -1,16 +1,17 @@
+// biome-ignore lint/correctness/noUnresolvedImports: broken
 import { compressToBase64, decompressFromBase64 } from "lz-string";
-import { deserialize, serialize } from "@/logic/storage/format/common";
-import type { WireFormat } from "@/logic/storage/format/types";
-import type { PronounsStorage } from "@/logic/storage/types";
-import { identity } from "@/logic/utils";
+import {
+	deserializeBinary,
+	serializeBinary,
+} from "@/logic/storage/format/binary.ts";
+import type { WireFormat } from "@/logic/storage/format/types.ts";
+import type { PronounsStorage } from "@/logic/storage/types.ts";
 
-const compress = (store: PronounsStorage): string => {
-	return compressToBase64(serialize(store, identity));
-};
+const compress = (store: PronounsStorage): string =>
+	compressToBase64(serializeBinary(store));
 
-const decompress = (raw: string): PronounsStorage => {
-	return deserialize(decompressFromBase64(raw), identity);
-};
+const decompress = (raw: string): PronounsStorage =>
+	deserializeBinary(decompressFromBase64(raw));
 
 export const LZ_FORMAT: WireFormat = {
 	compress,

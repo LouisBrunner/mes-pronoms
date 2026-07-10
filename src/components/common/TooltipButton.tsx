@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
-import { SimpleTooltip } from "@/components/common/SimpleTooltip";
-import { Button } from "@/components/ui/button";
+import { SimpleTooltip } from "@/components/common/SimpleTooltip.tsx";
+import { Button } from "@/components/ui/button.tsx";
 
 export type TooltipButtonProps = ComponentProps<typeof Button> &
 	ComponentProps<typeof SimpleTooltip>;
@@ -9,16 +9,14 @@ export const TooltipButton = ({
 	tooltip,
 	side,
 	...props
-}: TooltipButtonProps) => {
-	return (
-		<SimpleTooltip side={side} tooltip={tooltip}>
-			{props.disabled ? (
-				<span className="inline-block w-fit cursor-not-allowed">
-					<Button {...props} />
-				</span>
-			) : (
+}: TooltipButtonProps) => (
+	<SimpleTooltip side={side} tooltip={tooltip}>
+		{props.disabled ? (
+			<span className="inline-block w-fit cursor-not-allowed">
 				<Button {...props} />
-			)}
-		</SimpleTooltip>
-	);
-};
+			</span>
+		) : (
+			<Button {...props} />
+		)}
+	</SimpleTooltip>
+);
