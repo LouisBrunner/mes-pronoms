@@ -13,15 +13,13 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import { normalizeText } from "@/components/ui/_helpers.tsx";
 import {
 	InputGroup,
 	InputGroupAddon,
 	InputGroupButton,
 } from "@/components/ui/input-group.tsx";
 import { cn } from "@/logic/utils.ts";
-
-export const normalizeText = (s: string): string =>
-	s.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 const scoreMatch = (value: string, search: string): number =>
 	defaultFilter(normalizeText(value), normalizeText(search));
@@ -31,11 +29,10 @@ type ComboboxContextValue<T> = {
 	itemToStringLabel: (item: T) => string;
 	items: T[];
 	onFocus: () => void;
-	onBlur: () => void;
+	onBlur?: () => void;
 	onInputValueChange: (value: string) => void;
 	open: boolean;
 	openList: () => void;
-	searchQuery: string;
 	selectItem: (item: T | null) => void;
 	selectedLabel: string | null;
 	toggleOpen: () => void;
@@ -61,6 +58,7 @@ export type ComboboxProps<T> = {
 	onInputValueChange: (value: string) => void;
 	onValueChange: (value: T | null) => void;
 	value: T | null;
+	onBlur?: () => void;
 };
 
 function Combobox<T>({
@@ -71,13 +69,13 @@ function Combobox<T>({
 	onInputValueChange,
 	onValueChange,
 	value,
+	onBlur,
 }: ComboboxProps<T>) {
 	const anchorId = useId();
 	const [open, setOpen] = useState(false);
 	const [inputValue, setInputValue] = useState(() =>
 		value ? itemToStringLabel(value) : "",
 	);
-	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
 		setInputValue(value ? itemToStringLabel(value) : "");
@@ -86,7 +84,6 @@ function Combobox<T>({
 	const handleInputValueChange = useCallback(
 		(next: string) => {
 			setInputValue(next);
-			setSearchQuery(next);
 			setOpen(true);
 			onInputValueChange(next);
 		},
@@ -103,7 +100,6 @@ function Combobox<T>({
 	);
 
 	const openList = useCallback(() => {
-		setSearchQuery("");
 		setOpen(true);
 	}, []);
 
@@ -126,12 +122,11 @@ function Combobox<T>({
 			anchorId,
 			items,
 			itemToStringLabel,
-			onBlur: () => {},
+			onBlur,
 			onFocus: handleFocus,
 			onInputValueChange: handleInputValueChange,
 			open,
 			openList,
-			searchQuery,
 			selectedLabel: value ? itemToStringLabel(value) : null,
 			selectItem,
 			toggleOpen,
@@ -143,9 +138,9 @@ function Combobox<T>({
 			items,
 			handleFocus,
 			handleInputValueChange,
+			onBlur,
 			open,
 			openList,
-			searchQuery,
 			selectItem,
 			value,
 			toggleOpen,
@@ -160,7 +155,7 @@ function Combobox<T>({
 			<CommandPrimitive
 				aria-invalid={ariaInvalid}
 				data-slot="combobox"
-				shouldFilter={false}
+				filter={scoreMatch}
 			>
 				<PopoverPrimitive.Root modal={false} onOpenChange={setOpen} open={open}>
 					{children}
@@ -290,21 +285,8 @@ function ComboboxEmpty({ children }: { children: ReactNode }) {
 }
 
 function ComboboxList<T>({ children }: { children: (item: T) => ReactNode }) {
-	const { items, itemToStringLabel, searchQuery } = useComboboxContext<T>();
-	const filtered = useMemo(() => {
-		if (!searchQuery) {
-			return items;
-		}
-		return items
-			.map((item) => ({
-				item,
-				score: scoreMatch(itemToStringLabel(item), searchQuery),
-			}))
-			.filter(({ score }) => score > 0)
-			.sort((a, b) => b.score - a.score)
-			.map(({ item }) => item);
-	}, [items, itemToStringLabel, searchQuery]);
-	return <>{filtered.map(children)}</>;
+	const { items } = useComboboxContext<T>();
+	return <>{items.map(children)}</>;
 }
 
 function ComboboxItem<T>({

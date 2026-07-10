@@ -1,7 +1,7 @@
 import { HomeIcon } from "lucide-react";
 import { Link } from "react-router";
 import { Layout } from "@/components/common/Layout.tsx";
-import { buttonVariants } from "@/components/ui/button.tsx";
+import { buttonVariants } from "@/components/ui/_variants.tsx";
 
 export const NotFound = () => (
 	<Layout>

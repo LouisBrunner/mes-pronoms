@@ -7,7 +7,7 @@ export const usePronouns = (data: string | null): IPronounStore => {
 		if (data === null) {
 			return;
 		}
-		store.current.init(data);
+		store.current.update(data);
 	}, [data]);
 	return store.current;
 };

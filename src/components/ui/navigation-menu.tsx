@@ -1,7 +1,7 @@
-import { cva } from "class-variance-authority";
 import { ChevronDownIcon } from "lucide-react";
 import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui";
 import type * as React from "react";
+import { navigationMenuTriggerStyle } from "@/components/ui/_variants.tsx";
 import { cn } from "@/logic/utils.ts";
 
 function NavigationMenu({
@@ -56,10 +56,6 @@ function NavigationMenuItem({
 		/>
 	);
 }
-
-const navigationMenuTriggerStyle = cva(
-	"group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center rounded-lg px-2.5 py-1.5 text-xs/relaxed font-medium transition-all outline-none hover:bg-muted focus:bg-muted focus-visible:ring-2 focus-visible:ring-ring/30 focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 data-popup-open:bg-muted/50 data-popup-open:hover:bg-muted data-open:bg-muted/50 data-open:hover:bg-muted data-open:focus:bg-muted",
-);
 
 function NavigationMenuTrigger({
 	className,
@@ -162,5 +158,4 @@ export {
 	NavigationMenuList,
 	NavigationMenuTrigger,
 	NavigationMenuViewport,
-	navigationMenuTriggerStyle,
 };

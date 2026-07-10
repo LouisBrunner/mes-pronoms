@@ -1,8 +1,8 @@
 import { AlertCircleIcon, Eye, Pencil } from "lucide-react";
 import { Link } from "react-router";
 import { Layout } from "@/components/common/Layout.tsx";
+import { buttonVariants } from "@/components/ui/_variants.tsx";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert.tsx";
-import { buttonVariants } from "@/components/ui/button.tsx";
 
 export const Home = () => (
 	<Layout>

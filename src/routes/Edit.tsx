@@ -5,7 +5,7 @@ import { SimpleTooltip } from "@/components/common/SimpleTooltip.tsx";
 import { TooltipButton } from "@/components/common/TooltipButton.tsx";
 import { PronounChooser } from "@/components/pronouns/form/PronounChooser.tsx";
 import { PronounsLayout } from "@/components/pronouns/PronounsLayout.tsx";
-import { buttonVariants } from "@/components/ui/button.tsx";
+import { buttonVariants } from "@/components/ui/_variants.tsx";
 import { useAllPronouns } from "@/hooks/useAllPronouns.ts";
 import { usePronounsFromQuery } from "@/hooks/usePronounsFromQuery.ts";
 import { useWatchPronouns } from "@/hooks/useWatchPronouns.ts";
@@ -63,10 +63,7 @@ export const Edit = () => {
 			{(pronoun) => (
 				<PronounChooser
 					key={pronoun}
-					// biome-ignore lint/performance/noJsxPropsBind: but I don't want to
-					onValid={(valid: boolean): void => {
-						setValidFor(pronoun, valid);
-					}}
+					onValid={setValidFor}
 					pronoun={pronoun}
 					selections={selections}
 					store={store}

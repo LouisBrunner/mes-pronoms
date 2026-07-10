@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import { SimpleTooltip } from "@/components/common/SimpleTooltip.tsx";
 import { PronounsLayout } from "@/components/pronouns/PronounsLayout.tsx";
 import { PronounView } from "@/components/pronouns/PronounView.tsx";
-import { buttonVariants } from "@/components/ui/button.tsx";
+import { buttonVariants } from "@/components/ui/_variants.tsx";
 import { useAllPronouns } from "@/hooks/useAllPronouns.ts";
 import { usePronounsFromQuery } from "@/hooks/usePronounsFromQuery.ts";
 import { useShare } from "@/hooks/useShare.tsx";

@@ -1,9 +1,6 @@
 import { useCallback, useId, useMemo, useState } from "react";
-import {
-	type Resolver,
-	type ResolverResult,
-	useController,
-} from "react-hook-form";
+import { useController } from "react-hook-form";
+import { normalizeText } from "@/components/ui/_helpers.tsx";
 import {
 	Combobox,
 	ComboboxContent,
@@ -11,7 +8,6 @@ import {
 	ComboboxInput,
 	ComboboxItem,
 	ComboboxList,
-	normalizeText,
 } from "@/components/ui/combobox.tsx";
 import { Field, FieldError } from "@/components/ui/field.tsx";
 import { Item, ItemDescription, ItemTitle } from "@/components/ui/item.tsx";
@@ -67,7 +63,7 @@ const optionID = (option: Option) => {
 		case "pre":
 			return `${option.type}-${option.id}`;
 		case "write_in":
-			return `${option.type}-${option.value}`;
+			return option.type;
 	}
 };
 
@@ -114,23 +110,6 @@ export type FormValues = {
 	choice: PronounPick | "";
 };
 
-export const resolver: Resolver<FormValues> = (
-	values,
-): ResolverResult<FormValues> => {
-	if (values.choice === "") {
-		return {
-			errors: {
-				choice: {
-					message: "Vous devez renseigner un pronom",
-					type: "required",
-				},
-			},
-			values: {},
-		};
-	}
-	return { errors: {}, values };
-};
-
 export type PronounChooserFormProps = {
 	pronoun: PronounKind;
 };
@@ -147,17 +126,19 @@ export const PronounChooserForm = ({ pronoun }: PronounChooserFormProps) => {
 	const [inputValue, setInputValue] = useState("");
 
 	const base = Options[pronoun];
-	const hasExactMatch = useCallback(
-		(query: string): boolean =>
-			base.some((opt) => isExactMatch(formatOption(opt), query)),
+	const findExactMatch = useCallback(
+		(query: string): Option | undefined =>
+			base.find((opt) => isExactMatch(formatOption(opt), query)),
 		[base],
+	);
+	const hasExactMatch = useCallback(
+		(query: string): boolean => findExactMatch(query) !== undefined,
+		[findExactMatch],
 	);
 	const items: Option[] = useMemo(
 		() =>
 			inputValue && !hasExactMatch(inputValue)
-				? [...base, { type: "write_in", value: inputValue } as Option].toSorted(
-						(a, b) => formatOption(a).localeCompare(formatOption(b)),
-					)
+				? [...base, { type: "write_in", value: inputValue } as Option]
 				: base,
 		[inputValue, base, hasExactMatch],
 	);
@@ -168,14 +149,9 @@ export const PronounChooserForm = ({ pronoun }: PronounChooserFormProps) => {
 			setInputValue(input);
 			if (!input) {
 				onChange(optionToChoice(null));
-				onBlur();
-			} else if (hasExactMatch(input)) {
-				onBlur();
-			} else {
-				onChange(optionToChoice({ type: "write_in", value: input }));
 			}
 		},
-		[hasExactMatch, onChange, onBlur],
+		[onChange],
 	);
 	const setChoice = useCallback(
 		(opt: Option | null): void => {
@@ -184,6 +160,15 @@ export const PronounChooserForm = ({ pronoun }: PronounChooserFormProps) => {
 		},
 		[onChange],
 	);
+	const handleBlur = useCallback((): void => {
+		if (inputValue) {
+			const match = findExactMatch(inputValue);
+			onChange(
+				optionToChoice(match ?? { type: "write_in", value: inputValue }),
+			);
+		}
+		onBlur();
+	}, [inputValue, findExactMatch, onChange, onBlur]);
 
 	return (
 		<Field data-invalid={hasError}>
@@ -191,6 +176,7 @@ export const PronounChooserForm = ({ pronoun }: PronounChooserFormProps) => {
 				aria-invalid={hasError}
 				items={items}
 				itemToStringLabel={formatOption}
+				onBlur={handleBlur}
 				{...register}
 				onInputValueChange={setInput}
 				onValueChange={setChoice}

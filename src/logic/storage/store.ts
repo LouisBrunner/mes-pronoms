@@ -2,6 +2,7 @@
 import { toast } from "sonner";
 import { isDev } from "@/config.ts";
 import { choosePronoun, ensureChoice } from "@/logic/business.ts";
+import { getPronounSingular } from "@/logic/pronouns/_helpers.ts";
 import type { PronounKind } from "@/logic/pronouns/index.ts";
 import { benchmarkFormats } from "@/logic/storage/format/index.ts";
 import { packStore, unpackStore } from "@/logic/storage/packing.ts";
@@ -29,15 +30,27 @@ export type PronounChangeEvent = CustomEvent<PronounChangeEventDetails>;
 
 export type PronounSelections = Partial<Record<PronounKind, PronounPick>>;
 
+const isSamePronouns = (
+	a: PronounsStorage["pronouns"],
+	b: PronounsStorage["pronouns"],
+): boolean => {
+	const aKeys = Object.keys(a) as PronounKind[];
+	const bKeys = Object.keys(b) as PronounKind[];
+	if (aKeys.length !== bKeys.length) {
+		return false;
+	}
+	return aKeys.every((key) => a[key] === b[key]);
+};
+
 export interface IPronounStore extends EventTarget {
 	export: ({ compress }: ExportOptions) => string;
 
 	get: (pronoun: PronounKind) => PronounPick | undefined;
 	getAll: () => PronounSelections;
-	init: (data: string) => void;
 	set: (pronoun: PronounKind, choice: PronounPick | undefined) => void;
 
 	shortForm: () => string | undefined;
+	update: (data: string) => void;
 }
 
 export class PronounStore extends EventTarget implements IPronounStore {
@@ -48,27 +61,33 @@ export class PronounStore extends EventTarget implements IPronounStore {
 		super();
 		this.#cachedExport = {};
 		this.#store = emptyStorage();
-	}
-
-	init(data: string): void {
-		try {
-			this.#store = unpackStore(data);
-		} catch (e) {
-			const err = e as Error;
-			toast.error(`Impossible de lire les pronoms : ${err.message}`);
-			this.#store = emptyStorage();
-		}
-		this.#cachedExport = {};
-		this.dispatchEvent(
-			new CustomEvent<PronounChangeEventDetails>("changed", { detail: {} }),
-		);
 
 		if (isDev && typeof window !== "undefined") {
 			window.store = this;
 			window.benchmarkFormats = (
-				store: PronounsStorage = this.#store,
-			): Record<string, string> => benchmarkFormats(store);
+				store?: PronounsStorage,
+			): Record<string, string> => benchmarkFormats(store ?? this.#store);
 		}
+	}
+
+	update(data: string): void {
+		let next: PronounsStorage;
+		try {
+			next = unpackStore(data);
+		} catch (e) {
+			const err = e as Error;
+			toast.error(`Impossible de lire les pronoms : ${err.message}`);
+			next = emptyStorage();
+		}
+
+		if (isSamePronouns(this.#store.pronouns, next.pronouns)) {
+			return;
+		}
+		this.#store = next;
+		this.#cachedExport = {};
+		this.dispatchEvent(
+			new CustomEvent<PronounChangeEventDetails>("changed", { detail: {} }),
+		);
 	}
 
 	get(pronoun: PronounKind): PronounPick | undefined {
@@ -105,10 +124,13 @@ export class PronounStore extends EventTarget implements IPronounStore {
 			"PronomPossessif",
 		];
 		const words = includes
-			.map(
-				(pronoun) =>
-					choosePronoun(pronoun, this.#store.pronouns[pronoun])?.word,
-			)
+			.map((pronoun) => {
+				const chosen = choosePronoun(
+					pronoun,
+					this.#store.pronouns[pronoun],
+				)?.word;
+				return chosen ? getPronounSingular(chosen) : undefined;
+			})
 			.filter((word): word is string => word !== undefined)
 			.filter((word, i, all) => i === 0 || word !== all[i - 1]);
 		if (words.length === 0) {
