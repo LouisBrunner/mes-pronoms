@@ -1,9 +1,10 @@
 /** biome-ignore-all lint/style/useGlobalThis: I need it */
 import { toast } from "sonner";
 import { isDev } from "@/config.ts";
-import { choosePronoun, ensureChoice } from "@/logic/business.ts";
+import { choosePronoun } from "@/logic/business.ts";
 import { getPronounSingular } from "@/logic/pronouns/_helpers.ts";
 import type { PronounKind } from "@/logic/pronouns/index.ts";
+import { ensureChoice } from "@/logic/storage/format/common.ts";
 import { benchmarkFormats } from "@/logic/storage/format/index.ts";
 import { packStore, unpackStore } from "@/logic/storage/packing.ts";
 import {

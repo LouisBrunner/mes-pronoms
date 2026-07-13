@@ -1,5 +1,5 @@
-import { parseChoice } from "@/logic/business.ts";
 import { PronounList } from "@/logic/pronouns/index.ts";
+import { parseChoice } from "@/logic/storage/format/common.ts";
 import { emptyStorage, type PronounsStorage } from "@/logic/storage/types.ts";
 
 const UNSET = String.fromCharCode(0);

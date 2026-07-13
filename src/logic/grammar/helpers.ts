@@ -1,12 +1,12 @@
 /** biome-ignore-all lint/style/useNamingConvention: wrong */
-import { isSimpleForm } from "@/logic/pronouns/_helpers.ts";
+import { parseForm, type WordForm } from "@/logic/pronouns/_helpers.ts";
 import { PRONOUNS, type PronounKind } from "@/logic/pronouns/index.ts";
 import type { PronounSelections } from "@/logic/storage/store.ts";
 
 const resolveWord = (
 	kind: PronounKind,
 	selections: PronounSelections,
-): string | string[] => {
+): WordForm => {
 	const pick = selections[kind];
 	if (typeof pick === "string") {
 		return pick;
@@ -17,13 +17,7 @@ const resolveWord = (
 export const resolvePronouns = (
 	kind: PronounKind,
 	selections: PronounSelections,
-): [string, string] => {
-	const singular = resolveWord(kind, selections);
-	if (!isSimpleForm(singular)) {
-		return singular as [string, string];
-	}
-	return [singular, pluralize(kind, singular)];
-};
+): [string, string] => getForms(kind, resolveWord(kind, selections));
 
 const VOWEL_SOUND = /^[aeiouàâäéèêëïîôöùûüh]/i;
 export const mustEllide = (word: string): boolean => VOWEL_SOUND.test(word);
@@ -85,10 +79,11 @@ export const pluralize = (kind: PronounKind, word: string): string =>
 
 export const getForms = (
 	kind: PronounKind,
-	word: string | string[],
+	word: WordForm,
 ): [string, string] => {
-	if (isSimpleForm(word)) {
-		return [word, pluralize(kind, word)];
+	const form = parseForm(word);
+	if (form.type === "dual") {
+		return [form.singular, form.plural];
 	}
-	return word as [string, string];
+	return [form.singular, pluralize(kind, form.singular)];
 };

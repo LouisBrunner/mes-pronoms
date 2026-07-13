@@ -9,9 +9,10 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card.tsx";
-import { type ChosenPronoun, fetchGrammar } from "@/logic/business.ts";
+import type { ChosenPronoun } from "@/logic/business.ts";
 import { Examples } from "@/logic/grammar/examples.tsx";
 import { getForms } from "@/logic/grammar/helpers.ts";
+import { GRAMMAR } from "@/logic/grammar/index.ts";
 import type { PronounKind } from "@/logic/pronouns/index.ts";
 import type { PronounSelections } from "@/logic/storage/store.ts";
 import { cn } from "@/logic/utils.ts";
@@ -31,7 +32,7 @@ export const PronounCard = ({
 	children,
 	showMissing,
 }: PronounCardProps) => {
-	const grammar = fetchGrammar(pronoun);
+	const grammar = GRAMMAR[pronoun];
 
 	return (
 		<Card

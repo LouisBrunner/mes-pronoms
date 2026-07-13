@@ -6,6 +6,7 @@ import {
 	mustEllide,
 	resolvePronouns,
 } from "@/logic/grammar/helpers.ts";
+import type { WordForm } from "@/logic/pronouns/_helpers.ts";
 import {
 	PronounCategoryFamily,
 	type PronounKind,
@@ -50,7 +51,7 @@ const renderExamples = (list: Example[]): ReactNode => (
 
 export type ExamplesProps = {
 	kind: PronounKind;
-	word: string | string[];
+	word: WordForm;
 	selections: PronounSelections;
 };
 

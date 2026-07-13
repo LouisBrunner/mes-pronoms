@@ -6,26 +6,63 @@ export type IPronounDBEntry = {
 			word: string;
 	  }
 	| {
-			ipa: [string, string];
-			word: [string, string];
+			ipa: DualForm;
+			word: DualForm;
 	  }
 );
 
-export const isSimpleForm = (word: string | string[]): word is string =>
-	typeof word === "string";
+export type PronounForm =
+	| {
+			type: "single";
+			singular: string;
+	  }
+	| {
+			type: "dual";
+			singular: string;
+			plural: string;
+	  };
 
-export const getPronounSingular = (word: string | string[]): string => {
-	if (isSimpleForm(word)) {
-		return word;
+const pluralDelimiter = " / ";
+
+export type DualForm = [string, string];
+export type WordForm = string | DualForm;
+
+export const parseForm = (word: WordForm): PronounForm => {
+	if (typeof word !== "string") {
+		return {
+			plural: word[1],
+			singular: word[0],
+			type: "dual",
+		};
 	}
-	return word[0] as string;
+
+	if (word.includes(pluralDelimiter)) {
+		const parts = word.split(" / ");
+		if (parts.length === 2) {
+			return {
+				plural: parts[1] as string,
+				singular: parts[0] as string,
+				type: "dual",
+			};
+		}
+	}
+
+	return {
+		singular: word,
+		type: "single",
+	};
 };
 
-export const composePronouns = (word: string | string[]): string => {
-	if (isSimpleForm(word)) {
+export const getPronounSingular = (word: WordForm): string => {
+	const forms = parseForm(word);
+	return forms.singular;
+};
+
+export const composePronouns = (word: WordForm): string => {
+	if (typeof word === "string") {
 		return word;
 	}
-	return word.join(" / ");
+	return word.join(pluralDelimiter);
 };
 
 export type IPronounDB = IPronounDBEntry[];

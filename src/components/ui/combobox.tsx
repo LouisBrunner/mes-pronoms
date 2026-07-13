@@ -33,6 +33,7 @@ type ComboboxContextValue<T> = {
 	onInputValueChange: (value: string) => void;
 	open: boolean;
 	openList: () => void;
+	searchQuery: string;
 	selectItem: (item: T | null) => void;
 	selectedLabel: string | null;
 	toggleOpen: () => void;
@@ -76,6 +77,7 @@ function Combobox<T>({
 	const [inputValue, setInputValue] = useState(() =>
 		value ? itemToStringLabel(value) : "",
 	);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
 		setInputValue(value ? itemToStringLabel(value) : "");
@@ -84,6 +86,7 @@ function Combobox<T>({
 	const handleInputValueChange = useCallback(
 		(next: string) => {
 			setInputValue(next);
+			setSearchQuery(next);
 			setOpen(true);
 			onInputValueChange(next);
 		},
@@ -100,6 +103,7 @@ function Combobox<T>({
 	);
 
 	const openList = useCallback(() => {
+		setSearchQuery("");
 		setOpen(true);
 	}, []);
 
@@ -127,6 +131,7 @@ function Combobox<T>({
 			onInputValueChange: handleInputValueChange,
 			open,
 			openList,
+			searchQuery,
 			selectedLabel: value ? itemToStringLabel(value) : null,
 			selectItem,
 			toggleOpen,
@@ -141,6 +146,7 @@ function Combobox<T>({
 			onBlur,
 			open,
 			openList,
+			searchQuery,
 			selectItem,
 			value,
 			toggleOpen,
@@ -155,7 +161,7 @@ function Combobox<T>({
 			<CommandPrimitive
 				aria-invalid={ariaInvalid}
 				data-slot="combobox"
-				filter={scoreMatch}
+				shouldFilter={false}
 			>
 				<PopoverPrimitive.Root modal={false} onOpenChange={setOpen} open={open}>
 					{children}
@@ -263,7 +269,7 @@ function ComboboxContent({
 				sideOffset={6}
 			>
 				<CommandPrimitive.List
-					className="no-scrollbar max-h-72 scroll-py-1 overflow-y-auto overscroll-contain p-1"
+					className="no-scrollbar max-h-72 scroll-py-1 overflow-y-auto overscroll-contain p-1 [&>[cmdk-list-sizer]]:flex [&>[cmdk-list-sizer]]:flex-col"
 					data-slot="combobox-list"
 				>
 					{children}
@@ -273,14 +279,21 @@ function ComboboxContent({
 	);
 }
 
-function ComboboxEmpty({ children }: { children: ReactNode }) {
+function ComboboxEmpty<T>({ children }: { children: ReactNode }) {
+	const { items, itemToStringLabel, searchQuery } = useComboboxContext<T>();
+	const hasMatch =
+		!searchQuery ||
+		items.some((item) => scoreMatch(itemToStringLabel(item), searchQuery) > 0);
+	if (hasMatch) {
+		return null;
+	}
 	return (
-		<CommandPrimitive.Empty
+		<div
 			className="flex w-full justify-center py-2 text-center text-xs/relaxed text-muted-foreground"
 			data-slot="combobox-empty"
 		>
 			{children}
-		</CommandPrimitive.Empty>
+		</div>
 	);
 }
 
@@ -292,15 +305,24 @@ function ComboboxList<T>({ children }: { children: (item: T) => ReactNode }) {
 function ComboboxItem<T>({
 	children,
 	className,
+	order,
 	value: item,
 }: {
 	children: ReactNode;
 	className?: string;
+	/** Visual position among siblings (via CSS `order`), without changing
+	 * where this item sits in the underlying array/DOM. Lets a write-in
+	 * entry appear in its sorted spot while typing without physically
+	 * moving DOM nodes on every keystroke (which is expensive and can
+	 * confuse the popover's auto-positioning). */
+	order?: number;
 	value: T;
 }) {
-	const { itemToStringLabel, selectedLabel, selectItem } =
+	const { itemToStringLabel, searchQuery, selectedLabel, selectItem } =
 		useComboboxContext<T>();
-	const isCurrentValue = selectedLabel === itemToStringLabel(item);
+	const label = itemToStringLabel(item);
+	const isCurrentValue = selectedLabel === label;
+	const matches = !searchQuery || scoreMatch(label, searchQuery) > 0;
 	const select = useCallback(() => {
 		selectItem(item);
 	}, [item, selectItem]);
@@ -312,8 +334,11 @@ function ComboboxItem<T>({
 				className,
 			)}
 			data-slot="combobox-item"
+			disabled={!matches}
+			hidden={!matches}
 			onSelect={select}
-			value={itemToStringLabel(item)}
+			style={order === undefined ? undefined : { order }}
+			value={label}
 		>
 			{children}
 		</CommandPrimitive.Item>

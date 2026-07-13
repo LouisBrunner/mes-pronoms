@@ -1,8 +1,26 @@
-import { parseChoice } from "@/logic/business.ts";
-import { PronounList } from "@/logic/pronouns/index.ts";
+import {
+	PRONOUNS,
+	type PronounKind,
+	PronounList,
+} from "@/logic/pronouns/index.ts";
 import { emptyStorage, type PronounsStorage } from "@/logic/storage/types.ts";
 
 const PRONOUN_DELIM = ",";
+
+export const parseChoice = (
+	pronoun: PronounKind,
+	s: string,
+): string | number => {
+	const n = Number.parseInt(s, 10);
+	if (Number.isNaN(n)) {
+		return decodeURIComponent(s);
+	}
+	const choice = PRONOUNS[pronoun].lookup;
+	if (choice[n] === undefined) {
+		throw new Error(`invalid choice '${n}' for ${pronoun}`);
+	}
+	return n;
+};
 
 export const serialize = (
 	store: PronounsStorage,
@@ -52,4 +70,16 @@ export const deserialize = (
 		store.pronouns[pronoun] = choice;
 	}
 	return store;
+};
+
+export const ensureChoice = (
+	pronoun: PronounKind,
+	s: string,
+): string | number => {
+	for (const entry of PRONOUNS[pronoun].db) {
+		if (entry.word === s) {
+			return entry.id;
+		}
+	}
+	return s;
 };

@@ -1,4 +1,4 @@
-import { useCallback, useId, useMemo, useState } from "react";
+import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import { useController } from "react-hook-form";
 import { normalizeText } from "@/components/ui/_helpers.tsx";
 import {
@@ -14,6 +14,7 @@ import { Item, ItemDescription, ItemTitle } from "@/components/ui/item.tsx";
 import {
 	composePronouns,
 	getPronounSingular,
+	type WordForm,
 } from "@/logic/pronouns/_helpers.ts";
 import {
 	PRONOUNS,
@@ -26,7 +27,7 @@ type Option =
 	| {
 			type: "pre";
 			id: number;
-			word: string | string[];
+			word: WordForm;
 	  }
 	| {
 			type: "write_in";
@@ -93,19 +94,6 @@ const choiceToOption = (
 const isExactMatch = (label: string, query: string): boolean =>
 	normalizeText(label).toLowerCase() === normalizeText(query).toLowerCase();
 
-const renderOption = (item: Option) => (
-	<ComboboxItem key={optionID(item)} value={item}>
-		{item.type === "pre" ? (
-			formatOption(item)
-		) : (
-			<Item className="p-0 flex flex-col items-start gap-0" size="xs">
-				<ItemTitle>{item.value}</ItemTitle>
-				<ItemDescription className="font-extralight">Ajouté</ItemDescription>
-			</Item>
-		)}
-	</ComboboxItem>
-);
-
 export type FormValues = {
 	choice: PronounPick | "";
 };
@@ -123,9 +111,20 @@ export const PronounChooserForm = ({ pronoun }: PronounChooserFormProps) => {
 	});
 	const choiceId = useId();
 	const hasError = isTouched && Boolean(error);
-	const [inputValue, setInputValue] = useState("");
 
 	const base = Options[pronoun];
+	const option = useMemo(() => choiceToOption(value, base), [value, base]);
+	const [inputValue, setInputValue] = useState(() =>
+		option ? formatOption(option) : "",
+	);
+	// Keep the local input text in sync with the committed value — this also
+	// covers the initial mount, so an existing write-in selection (loaded
+	// from the URL) shows up in the options list right away instead of only
+	// after the user edits the field.
+	useEffect(() => {
+		setInputValue(option ? formatOption(option) : "");
+	}, [option]);
+
 	const findExactMatch = useCallback(
 		(query: string): Option | undefined =>
 			base.find((opt) => isExactMatch(formatOption(opt), query)),
@@ -135,6 +134,10 @@ export const PronounChooserForm = ({ pronoun }: PronounChooserFormProps) => {
 		(query: string): boolean => findExactMatch(query) !== undefined,
 		[findExactMatch],
 	);
+	// The write-in entry always stays appended last in the array/DOM — moving
+	// it around physically on every keystroke is expensive and can confuse
+	// the popover's auto-positioning. Its correct sorted spot is instead
+	// applied visually via CSS `order` in `orderOf` below.
 	const items: Option[] = useMemo(
 		() =>
 			inputValue && !hasExactMatch(inputValue)
@@ -142,7 +145,35 @@ export const PronounChooserForm = ({ pronoun }: PronounChooserFormProps) => {
 				: base,
 		[inputValue, base, hasExactMatch],
 	);
-	const option = useMemo(() => choiceToOption(value, base), [value, base]);
+	const orderOf = useCallback(
+		(item: Option): number => {
+			if (item.type === "pre") {
+				return base.indexOf(item) * 2;
+			}
+			const insertAt = base.findIndex(
+				(opt) => formatOption(opt).localeCompare(item.value) > 0,
+			);
+			return (insertAt === -1 ? base.length : insertAt) * 2 - 1;
+		},
+		[base],
+	);
+	const renderOption = useCallback(
+		(item: Option) => (
+			<ComboboxItem key={optionID(item)} order={orderOf(item)} value={item}>
+				{item.type === "pre" ? (
+					formatOption(item)
+				) : (
+					<Item className="p-0 flex flex-col items-start gap-0" size="xs">
+						<ItemTitle>{item.value}</ItemTitle>
+						<ItemDescription className="font-extralight">
+							Ajouté
+						</ItemDescription>
+					</Item>
+				)}
+			</ComboboxItem>
+		),
+		[orderOf],
+	);
 
 	const setInput = useCallback(
 		(input: string): void => {
