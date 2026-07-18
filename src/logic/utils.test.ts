@@ -14,11 +14,12 @@ describe("utils", () => {
 			["über", "Über"],
 		];
 
-		it.each(
-			cases,
-		)("capitalizes %s to %s", (input: string, expected: string) => {
-			expect(capitalize(input)).toBe(expected);
-		});
+		it.each(cases)(
+			"capitalizes %s to %s",
+			(input: string, expected: string) => {
+				expect(capitalize(input)).toBe(expected);
+			},
+		);
 	});
 
 	describe("identity", () => {
@@ -35,15 +36,16 @@ describe("utils", () => {
 			["e", "data", { compress: false }, "/e/data"],
 		];
 
-		it.each(
-			cases,
-		)("creates URL for action %s with data %s and options %p: %s", (action: string, data: string, options: ExportOptions, expected: string) => {
-			const mockStore = {
-				export: mock(() => data),
-			} as unknown as IPronounStore;
+		it.each(cases)(
+			"creates URL for action %s with data %s and options %p: %s",
+			(action: string, data: string, options: ExportOptions, expected: string) => {
+				const mockStore = {
+					export: mock(() => data),
+				} as unknown as IPronounStore;
 
-			expect(makeURL(action as "v" | "e", mockStore, options)).toBe(expected);
-			expect(mockStore.export).toHaveBeenCalledWith(options);
-		});
+				expect(makeURL(action as "v" | "e", mockStore, options)).toBe(expected);
+				expect(mockStore.export).toHaveBeenCalledWith(options);
+			},
+		);
 	});
 });

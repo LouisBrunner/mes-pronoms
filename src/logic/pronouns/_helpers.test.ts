@@ -54,11 +54,12 @@ describe("_helpers", () => {
 			],
 		];
 
-		it.each(
-			cases,
-		)("parses %s (%p)", (_label: string, input: WordForm, expected: PronounForm) => {
-			expect(parseForm(input)).toEqual(expected);
-		});
+		it.each(cases)(
+			"parses %s (%p)",
+			(_label: string, input: WordForm, expected: PronounForm) => {
+				expect(parseForm(input)).toEqual(expected);
+			},
+		);
 	});
 
 	describe("getPronounSingular", () => {
@@ -85,11 +86,12 @@ describe("_helpers", () => {
 			],
 		];
 
-		it.each(
-			cases,
-		)("returns the singular for %s (%p)", (_label: string, input: WordForm, expected: string) => {
-			expect(getPronounSingular(input)).toBe(expected);
-		});
+		it.each(cases)(
+			"returns the singular for %s (%p)",
+			(_label: string, input: WordForm, expected: string) => {
+				expect(getPronounSingular(input)).toBe(expected);
+			},
+		);
 	});
 
 	describe("composePronouns", () => {
@@ -120,10 +122,11 @@ describe("_helpers", () => {
 			],
 		];
 
-		it.each(
-			cases,
-		)("composes %s (%p) into %s", (_label: string, input: WordForm, expected: string) => {
-			expect(composePronouns(input)).toBe(expected);
-		});
+		it.each(cases)(
+			"composes %s (%p) into %s",
+			(_label: string, input: WordForm, expected: string) => {
+				expect(composePronouns(input)).toBe(expected);
+			},
+		);
 	});
 });
