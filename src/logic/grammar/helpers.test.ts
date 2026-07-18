@@ -61,12 +61,11 @@ describe("utils", () => {
 			["FamilleModificateur", "petite/grand/belle", "petites/grand/belles"],
 		];
 
-		it.each(cases)(
-			'pluralizes "%s" to "%s"',
-			(kind: PronounKind, input: string, expected: string) => {
-				expect(pluralize(kind, input)).toBe(expected);
-			},
-		);
+		it.each(
+			cases,
+		)('pluralizes "%s" to "%s"', (kind: PronounKind, input: string, expected: string) => {
+			expect(pluralize(kind, input)).toBe(expected);
+		});
 	});
 
 	describe("mustEllide", () => {
@@ -87,12 +86,11 @@ describe("utils", () => {
 			["starts with accented vowel", "élève", true],
 		];
 
-		it.each(cases)(
-			"elides %s (%p): %p",
-			(_label: string, word: string, expected: boolean) => {
-				expect(mustEllide(word)).toBe(expected);
-			},
-		);
+		it.each(
+			cases,
+		)("elides %s (%p): %p", (_label: string, word: string, expected: boolean) => {
+			expect(mustEllide(word)).toBe(expected);
+		});
 	});
 
 	describe("getForms", () => {
@@ -131,15 +129,14 @@ describe("utils", () => {
 			],
 		];
 
-		it.each(cases)(
-			"resolves forms for %s (%p): %p",
-			(_label: string, kind: PronounKind, word: WordForm, expected: [
-				string,
-				string,
-			]) => {
-				expect(getForms(kind, word)).toEqual(expected);
-			},
-		);
+		it.each(
+			cases,
+		)("resolves forms for %s (%p): %p", (_label: string, kind: PronounKind, word: WordForm, expected: [
+			string,
+			string,
+		]) => {
+			expect(getForms(kind, word)).toEqual(expected);
+		});
 	});
 
 	describe("resolvePronouns", () => {
@@ -190,14 +187,13 @@ describe("utils", () => {
 				],
 			];
 
-		it.each(cases)(
-			"resolves %s (%p): %p",
-			(_label: string, kind: PronounKind, selections: PronounSelections, expected: [
-				string,
-				string,
-			]) => {
-				expect(resolvePronouns(kind, selections)).toEqual(expected);
-			},
-		);
+		it.each(
+			cases,
+		)("resolves %s (%p): %p", (_label: string, kind: PronounKind, selections: PronounSelections, expected: [
+			string,
+			string,
+		]) => {
+			expect(resolvePronouns(kind, selections)).toEqual(expected);
+		});
 	});
 });
