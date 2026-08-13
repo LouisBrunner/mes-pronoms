@@ -1,0 +1,13 @@
+{
+	"application_type": "web",
+	"client_id": "https://mes-pronoms.lbrunner.net/client-metadata.json",
+	"client_name": "Mes Pronoms",
+	"client_uri": "https://mes-pronoms.lbrunner.net/",
+	"dpop_bound_access_tokens": true,
+	"grant_types": ["authorization_code", "refresh_token"],
+	"logo_uri": "https://mes-pronoms.lbrunner.net/android-icon-192x192.png",
+	"redirect_uris": ["https://mes-pronoms.lbrunner.net/u/me"],
+	"response_types": ["code"],
+	"scope": "atproto repo:net.lbrunner.pronoms",
+	"token_endpoint_auth_method": "none"
+}

@@ -1,8 +1,7 @@
 /** biome-ignore-all lint/style/useGlobalThis: I need it */
 import { toast } from "sonner";
 import { isDev } from "@/config.ts";
-import { choosePronoun } from "@/logic/business.ts";
-import { getPronounSingular } from "@/logic/pronouns/_helpers.ts";
+import { computeShortForm } from "@/logic/business.ts";
 import type { PronounKind } from "@/logic/pronouns/index.ts";
 import { ensureChoice } from "@/logic/storage/format/common.ts";
 import { benchmarkFormats } from "@/logic/storage/format/index.ts";
@@ -48,8 +47,9 @@ export interface IPronounStore extends EventTarget {
 
 	get: (pronoun: PronounKind) => PronounPick | undefined;
 	getAll: () => PronounSelections;
-	set: (pronoun: PronounKind, choice: PronounPick | undefined) => void;
 
+	load: (data: PronounsStorage) => void;
+	set: (pronoun: PronounKind, choice: PronounPick | undefined) => void;
 	shortForm: () => string | undefined;
 	update: (data: string) => void;
 }
@@ -80,7 +80,10 @@ export class PronounStore extends EventTarget implements IPronounStore {
 			toast.error(`Impossible de lire les pronoms : ${err.message}`);
 			next = emptyStorage();
 		}
+		this.load(next);
+	}
 
+	load(next: PronounsStorage): void {
 		if (isSamePronouns(this.#store.pronouns, next.pronouns)) {
 			return;
 		}
@@ -118,26 +121,7 @@ export class PronounStore extends EventTarget implements IPronounStore {
 	}
 
 	shortForm(): string | undefined {
-		const includes: PronounKind[] = [
-			"PronomSujet",
-			"PronomObjet",
-			"DeterminantPossessif",
-			"PronomPossessif",
-		];
-		const words = includes
-			.map((pronoun) => {
-				const chosen = choosePronoun(
-					pronoun,
-					this.#store.pronouns[pronoun],
-				)?.word;
-				return chosen ? getPronounSingular(chosen) : undefined;
-			})
-			.filter((word): word is string => word !== undefined)
-			.filter((word, i, all) => i === 0 || word !== all[i - 1]);
-		if (words.length === 0) {
-			return;
-		}
-		return words.join("/");
+		return computeShortForm(this.#store.pronouns);
 	}
 
 	export(options: ExportOptions): string {

@@ -1,0 +1,35 @@
+{
+	"defs": {
+		"main": {
+			"key": "literal:self",
+			"record": {
+				"properties": {
+					"createdAt": {
+						"format": "datetime",
+						"type": "string"
+					},
+					"grammar": {
+						"description": "Map of grammar category (see mes-pronoms' PronounKind) to the chosen word/form.",
+						"maxLength": 64,
+						"type": "object"
+					},
+					"shortForm": {
+						"description": "Compact display form, e.g. 'iel/ael'.",
+						"maxGraphemes": 64,
+						"type": "string"
+					},
+					"updatedAt": {
+						"format": "datetime",
+						"type": "string"
+					}
+				},
+				"required": ["grammar", "createdAt"],
+				"type": "object"
+			},
+			"type": "record"
+		}
+	},
+	"description": "A French pronoun/grammar profile, as used by mes-pronoms.lbrunner.net.",
+	"id": "net.lbrunner.pronoms",
+	"lexicon": 1
+}

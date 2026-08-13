@@ -1,4 +1,4 @@
-import { AlertCircleIcon, Eye, Pencil } from "lucide-react";
+import { AlertCircleIcon, Eye, Pencil, UserRound } from "lucide-react";
 import { Link } from "react-router";
 import { Layout } from "@/components/common/Layout.tsx";
 import { buttonVariants } from "@/components/ui/_variants.tsx";
@@ -18,9 +18,16 @@ export const Home = () => (
 			</hgroup>
 
 			<nav className="flex flex-wrap items-center mx-auto justify-center gap-4">
-				<Link className={buttonVariants({ size: "lg" })} to="/e/">
+				<Link className={buttonVariants({ size: "lg" })} to="/u/me">
+					<UserRound data-icon="inline-start" />
+					Mon profil permanent
+				</Link>
+				<Link
+					className={buttonVariants({ size: "lg", variant: "outline" })}
+					to="/e/"
+				>
 					<Pencil data-icon="inline-start" />
-					Choisir les vôtres
+					Créer un lien rapide
 				</Link>
 				<Link
 					className={buttonVariants({ size: "lg", variant: "outline" })}
@@ -43,11 +50,22 @@ export const Home = () => (
 				<AlertTitle>Attention !</AlertTitle>
 				<AlertDescription>
 					<p>
-						Une fois votre sélection faite, vous pouvez partager ce lien
-						n'importe où.
+						Deux façons de faire : avec <strong>Mon profil permanent</strong>,
+						vos pronoms sont enregistrés sur votre compte{" "}
+						<a
+							href="https://atproto.com"
+							rel="noopener noreferrer"
+							target="_blank"
+						>
+							atproto
+						</a>{" "}
+						(le protocole derrière Bluesky) et restent modifiables à tout moment
+						depuis n'importe quel appareil.
 						<br />
-						Cependant, comme l'information est stockée dans l'URL, si vous
-						souhaitez modifier vos pronoms, vous devrez générer un nouveau lien.
+						Avec <strong>Créer un lien rapide</strong>, aucun compte n'est
+						nécessaire, mais l'information est stockée directement dans l'URL :
+						si vous souhaitez modifier vos pronoms, vous devrez générer un
+						nouveau lien.
 					</p>
 				</AlertDescription>
 			</Alert>

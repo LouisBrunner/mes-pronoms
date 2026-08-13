@@ -6,6 +6,8 @@
 		"url": "https://lbrunner.net"
 	},
 	"dependencies": {
+		"@atproto/api": "^0.20.37",
+		"@atproto/oauth-client-browser": "^0.5.2",
 		"@fontsource-variable/montserrat": "^5.2.8",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
@@ -39,7 +41,7 @@
 		"bun": ">=1.0.0"
 	},
 	"homepage": "https://mes-pronoms.lbrunner.net/",
-	"license": "MIT",
+	"license": "MPL-2.0",
 	"name": "mes-pronoms",
 	"private": true,
 	"repository": {

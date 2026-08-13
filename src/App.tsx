@@ -8,6 +8,8 @@ import { Edit } from "@/routes/Edit.tsx";
 import { Home } from "@/routes/Home.tsx";
 import { NotFound } from "@/routes/NotFound.tsx";
 import { Test } from "@/routes/Test.tsx";
+import { UserMe } from "@/routes/UserMe.tsx";
+import { UserProfile } from "@/routes/UserProfile.tsx";
 import { View } from "@/routes/View.tsx";
 
 export const App = () => (
@@ -20,6 +22,8 @@ export const App = () => (
 						<Route element={<Home />} index />
 						<Route element={<Edit />} path="e/*" />
 						<Route element={<View />} path="v/*" />
+						<Route element={<UserMe />} path="u/me" />
+						<Route element={<UserProfile />} path="u/:did" />
 						<Route element={<Test />} path="test" />
 						<Route element={<NotFound />} path="*" />
 					</Routes>

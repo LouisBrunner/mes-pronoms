@@ -13,12 +13,14 @@ import type { IPronounStore } from "@/logic/storage/store.ts";
 export type PronounsLayoutProps = {
 	store: IPronounStore;
 	menuItems: ReactNode;
+	header?: ReactNode;
 	children: (pronoun: PronounKind) => ReactNode;
 };
 
 export const PronounsLayout = ({
 	menuItems,
 	store,
+	header,
 	children,
 }: PronounsLayoutProps) => {
 	const menu = (
@@ -33,6 +35,7 @@ export const PronounsLayout = ({
 
 	return (
 		<Layout menu={menu} title={store.shortForm()}>
+			{header}
 			<main className="mx-auto max-w-5xl space-y-6 px-4 py-5">
 				{PronounCategories.map((category) => (
 					<Collapsible defaultOpen key={category.title}>
