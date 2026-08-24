@@ -5,6 +5,8 @@ import { join } from "node:path";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { defineConfig, type Plugin } from "vite";
+import csp from "vite-plugin-csp-guard";
+import sri from "vite-plugin-sri-gen";
 
 const copy404Plugin = (): Plugin => {
 	let outDir = "dist";
@@ -21,7 +23,27 @@ const copy404Plugin = (): Plugin => {
 };
 
 export default defineConfig(() => ({
-	plugins: [react(), tailwindcss(), copy404Plugin()],
+	plugins: [
+		react(),
+		tailwindcss(),
+		csp({
+			algorithm: "sha256",
+			override: true,
+			policy: {
+				"base-uri": ["'none'"],
+				"connect-src": ["'self'", "https:"],
+				"default-src": ["'none'"],
+				"font-src": ["'self'"],
+				"form-action": ["'self'"],
+				"img-src": ["'self'", "https:"],
+				"object-src": ["'none'"],
+				"script-src": ["'self'", "https://static.cloudflareinsights.com"],
+				"style-src": ["'self'", "'unsafe-inline'"],
+			},
+		}),
+		sri(),
+		copy404Plugin(),
+	],
 	resolve: {
 		tsconfigPaths: true,
 	},
